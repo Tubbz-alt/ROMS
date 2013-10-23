@@ -2700,6 +2700,38 @@
         END IF
 #endif
 !
+! Output viscosities and diffusivities if SPONGE is used
+!
+#if defined SPONGE
+
+#if defined UV_VIS2
+        Vinfo( 1)='visc2_r'
+        Vinfo( 2)='harmonic viscosity _r'
+        Vinfo( 3)='meter^2 per second'
+        Vinfo(14)='visc2, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+#endif
+#if defined UV_VIS4
+        Vinfo( 1)='visc4_r'
+        Vinfo( 2)='biharmonic viscosity _r'
+        Vinfo( 3)='meter^4 per second'
+        Vinfo(14)='visc4, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+#endif
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+
+#endif
+!
 !  Coriolis Parameter.
 !
         IF (ncid.ne.STA(ng)%ncid) THEN
