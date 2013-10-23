@@ -2729,6 +2729,56 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+#if defined TS_DIF2
+        Vinfo( 1)='diff2_t'
+        Vinfo( 2)='harmonic diffusivity - temp'
+        Vinfo( 3)='meter^2 per second'
+        Vinfo(14)='diff2_t, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+#endif
+#if defined TS_DIF4
+        Vinfo( 1)='diff4_t'
+        Vinfo( 2)='biharmonic diffusivity - temp'
+        Vinfo( 3)='meter^4 per second'
+        Vinfo(14)='diff4_t, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+#endif
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+#if defined TS_DIF2
+        Vinfo( 1)='diff2_s'
+        Vinfo( 2)='harmonic diffusivity - salt'
+        Vinfo( 3)='meter^2 per second'
+        Vinfo(14)='diff2_s, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+#endif
+#if defined TS_DIF4
+        Vinfo( 1)='diff4_s'
+        Vinfo( 2)='biharmonic diffusivity - salt'
+        Vinfo( 3)='meter^4 per second'
+        Vinfo(14)='diff4_s, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+#endif
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
 
 #endif
 !

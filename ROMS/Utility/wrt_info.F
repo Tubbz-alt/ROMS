@@ -50,7 +50,9 @@
 #if defined SOLVE3D && defined TS_PSOURCE
       USE mod_sources
 #endif
-
+#if defined SPONGE
+      USE mod_mixing
+#endif
 #if !defined PARALLEL_IO  && defined DISTRIBUTE
       USE distribute_mod, ONLY : mp_bcasti
 #endif
@@ -1373,6 +1375,105 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
+#endif
+#if defined UV_VIS4
+            IF (find_string(var_name, n_var, 'visc4_r', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           MIXING(ng) % visc4_r,                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'visc4_r', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'visc4_r', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#endif
+#if defined TS_DIF2
+            IF (find_string(var_name, n_var, 'diff2_t', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           MIXING(ng) % diff2(:,:,itemp),                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'diff2_t', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'diff2_t', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+            IF (find_string(var_name, n_var, 'diff2_s', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           MIXING(ng) % diff2(:,:,isalt),                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'diff2_s', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'diff2_s', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+
+#endif
+#if defined TS_DIF4
+            IF (find_string(var_name, n_var, 'diff4_t', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           MIXING(ng) % diff4(:,:,itemp),                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'diff4_t', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'diff4_t', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+
+            IF (find_string(var_name, n_var, 'diff4_s', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           MIXING(ng) % diff4(:,:,isalt),                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'diff4_s', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'diff4_s', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+
 #endif
           END IF
         END IF
