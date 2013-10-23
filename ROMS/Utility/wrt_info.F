@@ -1348,6 +1348,36 @@
         END IF
 #endif
 !
+!  Write out viscosities if using sponge
+!
+#if defined SPONGE
+        IF (exit_flag.eq.NoError) THEN
+          IF (ncid.ne.STA(ng)%ncid) THEN
+            scale=1.0_r8
+#if defined UV_VIS2
+            IF (find_string(var_name, n_var, 'visc2_r', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           MIXING(ng) % visc2_r,                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'visc2_r', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'visc2_r', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#endif
+          END IF
+        END IF
+#endif
+!
 !  Coriolis parameter.
 !
         IF (exit_flag.eq.NoError) THEN
