@@ -34,6 +34,10 @@
       integer :: Npts, Nval
       integer :: i, j, igrid, mc, nc, ng, status
 
+! loop counters for float deployment - DC
+      integer :: ii,jj,kk,count
+      integer :: nlimit,xlimit,ylimit,zlimit,tlimit
+
       integer, dimension(Ngrids) :: ncount, nentry
 
       integer, allocatable :: Fcoor(:,:), Fcount(:,:), Ftype(:,:)
@@ -216,6 +220,16 @@
 !  vertical level or depth position.
 !
 
+! From Modules/mod_floats.F
+!  Findex     Indices of spherical coordinates entries in initial      !
+!               location arrays, if any.                               !
+!  Flon       Initial longitude locations, if any.                     !
+!  Flat       Initial latitude locations, if any.                      !
+!  Ftype      Float trajectory type:                                   !
+!               Ftype(:) = 1,  neutral density 3D Lagrangian           !
+!               Ftype(:) = 2,  isobaric (constant depth) float.        !
+!  Tinfo      Float trajectory initial information.                    !
+
 #if defined DC_FLOATS_DEPLOYMENT
       DO ng=1,Ngrids
         mc=0
@@ -237,9 +251,45 @@
                 DRIFTER(ng)%Findex(mc)=nc
               END IF
             ELSE IF (Fcount(i,ng).gt.1) THEN
-              DO j=1,Fcount(i,ng)
-                nc=nc+1
+               ! figure out how to distribute floats
+               ! First, how many dimensions do I distribute across?
+               count = 0
+               IF (Fdx(i,ng).gt.0.0_r8) THEN
+                  count = count+1
+               END IF
+               IF (Fdy(i,ng).gt.0.0_r8) THEN
+                  count = count+1
+               END IF
+               IF (Fdz(i,ng).gt.0.0_r8) THEN
+                  count = count+1
+               END IF
+               IF (Fdt(i,ng).gt.0.0_r8) THEN
+                  count = count+1
+               END IF
+               nlimit = Fcount(i,ng) ** (1.0/count)
+               ! Now figure out individual loop limits
+               xlimit = 1
+               ylimit = 1
+               zlimit = 1
+               tlimit = 1
+               IF (Fdx(i,ng).gt.0.0_r8) THEN
+                  xlimit = nlimit
+               END IF
+               IF (Fdy(i,ng).gt.0.0_r8) THEN
+                  ylimit = nlimit
+               END IF
+               IF (Fdz(i,ng).gt.0.0_r8) THEN
+                  zlimit = nlimit
+               END IF
+               IF (Fdt(i,ng).gt.0.0_r8) THEN
+                  tlimit = nlimit
+               END IF
+      
+              ! loops over number of floats in each entry
+              DO j=1,Fcount(i,ng) 
+                ! distribute in time also
                 IF (Fdt(i,ng).gt.0.0_r8) THEN
+                   nc = nc+1
                   DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng)+        &
      &                                         REAL(j-1,r8)*Fdt(i,ng))* &
      &                                        day2sec
@@ -254,42 +304,56 @@
                     DRIFTER(ng)%Flat(mc)=Fy0(i,ng)
                     DRIFTER(ng)%Findex(mc)=nc
                   END IF
-                ELSE
-                  DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng))*day2sec
-                  IF (Fdz(i,ng).eq.0.0_r8) THEN
-                    DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)
-                  ELSE
-                    IF (Fz0(i,ng).gt.0.0_r8) THEN
-                      zfloat=Fz0(i,ng)+REAL(j-1,r8)*Fdz(i,ng)
-                      DRIFTER(ng)%Tinfo(izgrd,nc)=MIN(MAX(0.0_r8,       &
-     &                                                    zfloat),      &
-     &                                                REAL(N(ng),r8))
-                    ELSE
-                      DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)+            &
-     &                                            REAL(j-1,r8)*Fdz(i,ng)
-                    END IF
-                  END IF
-                  DRIFTER(ng)%Ftype(nc)=Ftype(i,ng)
-                  IF (Fcoor(i,ng).eq.0) THEN
-                    xfloat=Fx0(i,ng)+REAL(j-1,r8)*Fdx(i,ng)
-                    yfloat=Fy0(i,ng)+REAL(j-1,r8)*Fdy(i,ng)
-                    DRIFTER(ng)%Tinfo(ixgrd,nc)=xfloat
-                    DRIFTER(ng)%Tinfo(iygrd,nc)=yfloat
-                  ELSE
-                    mc=mc+1
-                    DRIFTER(ng)%Flon(mc)=Fx0(i,ng)+                     &
-     &                                   REAL(j-1,r8)*Fdx(i,ng)
-                    DRIFTER(ng)%Flat(mc)=Fy0(i,ng)+                     &
-     &                                   REAL(j-1,r8)*Fdy(i,ng)
-                    DRIFTER(ng)%Findex(mc)=nc
-                  END IF
-                END IF
-              END DO
-            END IF
-          END DO
+                ! No distribution in time
+                ELSE ! Fdt .gt. 0
+                  ! Let's distribute in x,y,z 
+                   DO ii=1,xlimit
+                     DO jj=1,ylimit
+                        DO kk=1,zlimit
+                         nc=nc+1
+                         DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng))   &
+     &                                                   * day2sec
+                        ! i counts entry number ; i=1:nentry
+                        DRIFTER(ng)%Ftype(nc)=Ftype(i,ng)
+                  
+                        ! distribute in z, Fz0 > 0 -> indices 
+                        IF (Fz0(i,ng).gt.0.0_r8) THEN
+                           zfloat=Fz0(i,ng)+REAL(kk-1,r8)*Fdz(i,ng)
+                           DRIFTER(ng)%Tinfo(izgrd,nc)=MIN(MAX(0.0_r8,       &
+     &                                                         zfloat),      &
+     &                                                  REAL(N(ng),r8))
+                        ELSE
+                              ! in metres
+                              DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)+            &
+     &                             REAL(kk-1,r8)*Fdz(i,ng)
+                        END IF
+
+                        IF (Fcoor(i,ng).eq.0) THEN
+                           xfloat=Fx0(i,ng)+REAL(ii-1,r8)*Fdx(i,ng)
+                           yfloat=Fy0(i,ng)+REAL(jj-1,r8)*Fdy(i,ng)
+                           DRIFTER(ng)%Tinfo(ixgrd,nc)=xfloat
+                           DRIFTER(ng)%Tinfo(iygrd,nc)=yfloat
+                        ELSE
+                           mc=mc+1
+                           DRIFTER(ng)%Flon(mc)=Fx0(i,ng)+                     &
+     &                          REAL(ii-1,r8)*Fdx(i,ng)
+                           DRIFTER(ng)%Flat(mc)=Fy0(i,ng)+                     &
+     &                          REAL(jj-1,r8)*Fdy(i,ng)
+                           DRIFTER(ng)%Findex(mc)=nc
+                        END IF
+
+                        END DO !! kk
+                     END DO !! jj
+                  END DO !! ii
+                END IF ! Fdt .gt. 0
+              END DO ! j = 1:Fcount(ng)
+            END IF ! Fcount if
+          END DO ! i = 1,nentry(ng) 
           DRIFTER(ng)%Findex(0)=mc
-        END IF
-      END DO
+        END IF ! if LFLOATS
+      END DO ! ng=1,Ngrids
+
+! ELSE ROMS default float deployment
 #else
       DO ng=1,Ngrids
         mc=0
