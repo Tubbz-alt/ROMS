@@ -35,7 +35,7 @@
       integer :: i, j, igrid, mc, nc, ng, status
 
 ! loop counters for float deployment - DC
-      integer :: ii,jj,kk,count
+      integer :: ii,jj,kk,tt,count
       integer :: nlimit,xlimit,ylimit,zlimit,tlimit
 
       integer, dimension(Ngrids) :: ncount, nentry
@@ -284,48 +284,31 @@
                IF (Fdt(i,ng).gt.0.0_r8) THEN
                   tlimit = nlimit
                END IF
-      
-              ! loops over number of floats in each entry
-              DO j=1,Fcount(i,ng) 
-                ! distribute in time also
-                IF (Fdt(i,ng).gt.0.0_r8) THEN
-                   nc = nc+1
-                  DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng)+        &
-     &                                         REAL(j-1,r8)*Fdt(i,ng))* &
+               print *,'nlimit = ',nlimit,'xlimit = ',xlimit
+               print *,'ylimit = ', ylimit,'zlimit = ', zlimit
+               print *,'tlimit = ',tlimit      
+               print *,'distributing floats in x,y,z,t'
+               DO ii=1,xlimit
+                  DO jj=1,ylimit
+                     DO kk=1,zlimit
+                        DO tt=1,tlimit
+                        nc=nc+1
+                        DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng)+       &
+     &                                         REAL(tt-1,r8)*Fdt(i,ng))*     &
      &                                        day2sec
-                  DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)
-                  DRIFTER(ng)%Ftype(nc)=Ftype(i,ng)
-                  IF (Fcoor(i,ng).eq.0) THEN
-                    DRIFTER(ng)%Tinfo(ixgrd,nc)=Fx0(i,ng)
-                    DRIFTER(ng)%Tinfo(iygrd,nc)=Fy0(i,ng)
-                  ELSE
-                    mc=mc+1
-                    DRIFTER(ng)%Flon(mc)=Fx0(i,ng)
-                    DRIFTER(ng)%Flat(mc)=Fy0(i,ng)
-                    DRIFTER(ng)%Findex(mc)=nc
-                  END IF
-                ! No distribution in time
-                ELSE ! Fdt .gt. 0
-                  ! Let's distribute in x,y,z 
-                   DO ii=1,xlimit
-                     DO jj=1,ylimit
-                        DO kk=1,zlimit
-                         nc=nc+1
-                         DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng))   &
-     &                                                   * day2sec
-                        ! i counts entry number ; i=1:nentry
+! i counts entry number ; i=1:nentry
                         DRIFTER(ng)%Ftype(nc)=Ftype(i,ng)
-                  
-                        ! distribute in z, Fz0 > 0 -> indices 
+                        
+! distribute in z, Fz0 > 0 -> indices 
                         IF (Fz0(i,ng).gt.0.0_r8) THEN
                            zfloat=Fz0(i,ng)+REAL(kk-1,r8)*Fdz(i,ng)
                            DRIFTER(ng)%Tinfo(izgrd,nc)=MIN(MAX(0.0_r8,       &
-     &                                                         zfloat),      &
-     &                                                  REAL(N(ng),r8))
+     &                          zfloat),      &
+     &                          REAL(N(ng),r8))
                         ELSE
-                              ! in metres
-                              DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)+            &
-     &                             REAL(kk-1,r8)*Fdz(i,ng)
+! in metres
+                           DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)+            &
+     &                          REAL(kk-1,r8)*Fdz(i,ng)
                         END IF
 
                         IF (Fcoor(i,ng).eq.0) THEN
@@ -341,12 +324,12 @@
      &                          REAL(jj-1,r8)*Fdy(i,ng)
                            DRIFTER(ng)%Findex(mc)=nc
                         END IF
-
-                        END DO !! kk
-                     END DO !! jj
-                  END DO !! ii
-                END IF ! Fdt .gt. 0
-              END DO ! j = 1:Fcount(ng)
+                        END DO  !! tt
+                     END DO     !! kk
+                  END DO        !! jj
+               END DO           !! ii
+ !               END IF ! Fdt .gt. 0
+!              END DO ! j = 1:Fcount(ng)
             END IF ! Fcount if
           END DO ! i = 1,nentry(ng) 
           DRIFTER(ng)%Findex(0)=mc
