@@ -215,6 +215,8 @@
 !  initial float horizontal positions (grid units).  Fill the initial
 !  vertical level or depth position.
 !
+
+#if defined DC_FLOATS_DEPLOYMENT
       DO ng=1,Ngrids
         mc=0
         nc=0
@@ -288,6 +290,81 @@
           DRIFTER(ng)%Findex(0)=mc
         END IF
       END DO
+#else
+      DO ng=1,Ngrids
+        mc=0
+        nc=0
+        IF (Lfloats(ng)) THEN
+          DO i=1,nentry(ng)
+            IF (Fcount(i,ng).eq.1) THEN
+              nc=nc+1
+              DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng))*day2sec
+              DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)
+              DRIFTER(ng)%Ftype(nc)=Ftype(i,ng)
+              IF (Fcoor(i,ng).eq.0) THEN
+                DRIFTER(ng)%Tinfo(ixgrd,nc)=Fx0(i,ng)
+                DRIFTER(ng)%Tinfo(iygrd,nc)=Fy0(i,ng)
+              ELSE
+                mc=mc+1
+                DRIFTER(ng)%Flon(mc)=Fx0(i,ng)
+                DRIFTER(ng)%Flat(mc)=Fy0(i,ng)
+                DRIFTER(ng)%Findex(mc)=nc
+              END IF
+            ELSE IF (Fcount(i,ng).gt.1) THEN
+              DO j=1,Fcount(i,ng)
+                nc=nc+1
+                IF (Fdt(i,ng).gt.0.0_r8) THEN
+                  DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng)+        &
+     &                                         REAL(j-1,r8)*Fdt(i,ng))* &
+     &                                        day2sec
+                  DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)
+                  DRIFTER(ng)%Ftype(nc)=Ftype(i,ng)
+                  IF (Fcoor(i,ng).eq.0) THEN
+                    DRIFTER(ng)%Tinfo(ixgrd,nc)=Fx0(i,ng)
+                    DRIFTER(ng)%Tinfo(iygrd,nc)=Fy0(i,ng)
+                  ELSE
+                    mc=mc+1
+                    DRIFTER(ng)%Flon(mc)=Fx0(i,ng)
+                    DRIFTER(ng)%Flat(mc)=Fy0(i,ng)
+                    DRIFTER(ng)%Findex(mc)=nc
+                  END IF
+                ELSE
+                  DRIFTER(ng)%Tinfo(itstr,nc)=(dstart+Ft0(i,ng))*day2sec
+                  IF (Fdz(i,ng).eq.0.0_r8) THEN
+                    DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)
+                  ELSE
+                    IF (Fz0(i,ng).gt.0.0_r8) THEN
+                      zfloat=Fz0(i,ng)+REAL(j-1,r8)*Fdz(i,ng)
+                      DRIFTER(ng)%Tinfo(izgrd,nc)=MIN(MAX(0.0_r8,       &
+     &                                                    zfloat),      &
+     &                                                REAL(N(ng),r8))
+                    ELSE
+                      DRIFTER(ng)%Tinfo(izgrd,nc)=Fz0(i,ng)+            &
+     &                                            REAL(j-1,r8)*Fdz(i,ng)
+                    END IF
+                  END IF
+                  DRIFTER(ng)%Ftype(nc)=Ftype(i,ng)
+                  IF (Fcoor(i,ng).eq.0) THEN
+                    xfloat=Fx0(i,ng)+REAL(j-1,r8)*Fdx(i,ng)
+                    yfloat=Fy0(i,ng)+REAL(j-1,r8)*Fdy(i,ng)
+                    DRIFTER(ng)%Tinfo(ixgrd,nc)=xfloat
+                    DRIFTER(ng)%Tinfo(iygrd,nc)=yfloat
+                  ELSE
+                    mc=mc+1
+                    DRIFTER(ng)%Flon(mc)=Fx0(i,ng)+                     &
+     &                                   REAL(j-1,r8)*Fdx(i,ng)
+                    DRIFTER(ng)%Flat(mc)=Fy0(i,ng)+                     &
+     &                                   REAL(j-1,r8)*Fdy(i,ng)
+                    DRIFTER(ng)%Findex(mc)=nc
+                  END IF
+                END IF
+              END DO
+            END IF
+          END DO
+          DRIFTER(ng)%Findex(0)=mc
+        END IF
+      END DO
+#endif
 !
 !  Deallocate local arrays.
 !
