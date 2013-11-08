@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE initial
 !
-!svn $Id: initial.F 678 2013-07-30 16:05:53Z arango $
+!svn $Id: initial.F 691 2013-10-24 21:33:19Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -318,6 +318,21 @@
           END DO
 !$OMP BARRIER
         END DO
+
+#if defined WTYPE_GRID && defined ANA_WTYPE     && \
+   (defined LMD_SKPP   || defined SOLAR_SOURCE)
+!
+!-----------------------------------------------------------------------
+!  Set spatially varying Jerlov water type.
+!-----------------------------------------------------------------------
+!
+        DO ng=1,Ngrids
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL ana_wtype (ng, tile, iNLM)
+          END DO
+        END DO
+!$OMP BARRIER
+#endif
 !
 !-----------------------------------------------------------------------
 !  If appropriate, set nudging coefficiests time scales.
@@ -676,6 +691,22 @@
 !$OMP END MASTER
 !$OMP BARRIER
 # endif
+!
+!  If applicable, check input multi-files where the time records for
+!  a particular field are split into several NetCDF files.  Initialize
+!  several parameters in the file structure so the appropriate input
+!  file is selected during initialization/restart.
+!
+      DO ng=1,Ngrids
+!$OMP MASTER
+        CALL check_multifile (ng, iNLM)
+!$OMP END MASTER
+# ifdef DISTRIBUTE
+        CALL mp_bcasti (ng, iNLM, exit_flag)
+# endif
+!$OMP BARRIER
+        IF (exit_flag.ne.NoError) RETURN
+      END DO
 !
 !  If applicable, read in input data.
 !

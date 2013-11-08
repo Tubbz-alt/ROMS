@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       MODULE ocean_control_mod
 !
-!svn $Id: is4dvar_ocean.h 658 2013-04-18 22:17:05Z arango $
+!svn $Id: is4dvar_ocean.h 694 2013-10-29 21:03:27Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -1271,13 +1271,13 @@
  20   FORMAT (/,1x,a,1x,'ROMS/TOMS: started time-stepping:',            &
      &        ' (Grid: ',i2.2,' TimeSteps: ',i8.8,' - ',i8.8,')',/)
  30   FORMAT (/,' (',i3.3,',',i3.3,'): TLM Cost Jb, J  = ',             &
-     &        1p,e16.10,0p,1x,1p,e16.10,0p,t68,1p,e10.4,' %')
+     &        1p,e17.10,0p,1x,1p,e17.10,0p,t68,1p,e11.4,' %')
  40   FORMAT (/,'>(',i3.3,',',i3.3,'): NLM Cost     J  = ',             &
-     &        17x,1p,e16.10,0p)
+     &        18x,1p,e17.10,0p)
  50   FORMAT (' (',i3.3,',',i3.3,'): NLM Cost     J  = ',               &
-     &        17x,1p,e16.10,0p,t68,a)
+     &        18x,1p,e17.10,0p,t69,a)
  60   FORMAT (/,1x,'(',i3.3,',',i3.3,'): Optimality (2*J/Nobs) = ',     &
-     &        1p,e16.10,/)
+     &        1p,e17.10,/)
 
       RETURN
       END SUBROUTINE ROMS_run

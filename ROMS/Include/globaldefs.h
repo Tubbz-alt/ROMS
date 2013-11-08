@@ -1,7 +1,7 @@
 /*
 ** Include file "globaldef.h"
 **
-** svn $Id: globaldefs.h 645 2013-01-22 23:21:54Z arango $
+** svn $Id: globaldefs.h 691 2013-10-24 21:33:19Z arango $
 ********************************************************** Hernan G. Arango ***
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group     Alexander F. Shchepetkin  **
 **   Licensed under a MIT/X style license                                    **
@@ -677,7 +677,8 @@
     (!defined AIR_OCEAN    && \
      !defined BULK_FLUXES  && !defined ANA_SMFLUX)   || \
     (!defined BULK_FLUXES  && !defined ANA_STFLUX)   || \
-    ( defined SALINITY     && !defined ANA_SSFLUX)   || \
+    ( defined BIOLOGY      && !defined ANA_SPFLUX)   || \
+    ( defined BIOLOGY      && !defined ANA_BPFLUX)   || \
     ( defined BULK_FLUXES  && !defined LONGWAVE)     || \
     ( defined BULK_FLUXES  && !defined ANA_PAIR)     || \
     ( defined BULK_FLUXES  && !defined ANA_TAIR)     || \
@@ -687,11 +688,13 @@
     ( defined BULK_FLUXES  && !defined ANA_WINDS)    || \
     ( defined BULK_FLUXES  && !defined ANA_SRFLUX)   || \
     ( defined LMD_SKPP     && !defined ANA_SRFLUX)   || \
+    ( defined SALINITY     && !defined ANA_SSFLUX)   || \
     ( defined SOLAR_SOURCE && !defined ANA_SRFLUX)   || \
+   (( defined TS_PSOURCE   || defined UV_PSOURCE     || \
+      defined Q_PSOURCE)   && !defined ANA_PSOURCE)  || \
+    ( defined  SSH_TIDES   || defined UV_TIDES)      || \
     ( defined BBL_MODEL    && (!defined ANA_WWAVE    && \
      !defined WAVES_OCEAN))                          || \
-    ( defined BIOLOGY      && !defined ANA_SPFLUX)   || \
-    ( defined BIOLOGY      && !defined ANA_BPFLUX)   || \
     ( defined SEDIMENT     && !defined ANA_SPFLUX)   || \
     ( defined SEDIMENT     && !defined ANA_BPFLUX)   || \
     ( defined WAVE_DATA    && (!defined ANA_WWAVE    && \
@@ -699,7 +702,8 @@
 #  define FRC_FILE
 # endif
 #else
-# if !defined ANA_SMFLUX
+# if !defined ANA_SMFLUX   || \
+    ( defined  SSH_TIDES   || defined UV_TIDES)
 #  define FRC_FILE
 # endif
 #endif
@@ -789,6 +793,7 @@
 #if defined ANA_BIOLOGY    || defined ANA_BPFLUX     || \
     defined ANA_BSFLUX     || defined ANA_BTFLUX     || \
     defined ANA_CLOUD      || defined ANA_DIAG       || \
+    defined ANA_DQDSST     || defined ANA_DRAG       || \
     defined ANA_FSOBC      || defined ANA_GRID       || \
     defined ANA_HUMIDITY   || defined ANA_INITIAL    || \
     defined ANA_M2CLIMA    || defined ANA_M2OBC      || \

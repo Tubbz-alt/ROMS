@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       MODULE mod_ncparam
 !
-!svn $Id: mod_ncparam.F 658 2013-04-18 22:17:05Z arango $
+!svn $Id: mod_ncparam.F 689 2013-10-15 21:34:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -181,6 +181,7 @@
         integer  :: idFsuD        ! detided free-surface
         integer  :: idFsuH        ! free-surface tide harmonics
         integer  :: idGhat(2)     ! KPP nonlocal transport
+        integer  :: idJWTy        ! Jerlov water type
         integer  :: idHbbl        ! depth of bottom boundary layer
         integer  :: idHice        ! depth of ice cover
         integer  :: idHsbl        ! depth of surface boundary layer
@@ -483,7 +484,7 @@
 !
         logical :: Lanafile
 
-        character (len=256), dimension(37) :: ANANAME
+        character (len=256), dimension(39) :: ANANAME
 
 #ifdef BIOLOGY
 !
@@ -711,7 +712,7 @@
 !  Analytical files switch and names.
 !
       Lanafile=.TRUE.
-      DO i=1,37
+      DO i=1,38
         DO j=1,LEN(ANANAME(1))
           ANANAME(i)(j:j)=' '
         END DO

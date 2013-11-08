@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE def_info (ng, model, ncid, ncname, DimIDs)
 !
-!svn $Id: def_info.F 645 2013-01-22 23:21:54Z arango $
+!svn $Id: def_info.F 689 2013-10-15 21:34:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -849,7 +849,7 @@
 !  Analytical header files used.
 !
         IF (exit_flag.eq.NoError) THEN
-          CALL join_string (ANANAME, 37, string, lstr)
+          CALL join_string (ANANAME, 39, string, lstr)
           IF (lstr.gt.0) THEN
             status=nf90_put_att(ncid, nf90_global, 'ana_file',          &
      &                          string(1:lstr))

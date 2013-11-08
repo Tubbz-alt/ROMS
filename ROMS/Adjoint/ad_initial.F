@@ -2,7 +2,7 @@
 #ifdef ADJOINT
       SUBROUTINE ad_initial (ng)
 !
-!svn $Id: ad_initial.F 645 2013-01-22 23:21:54Z arango $
+!svn $Id: ad_initial.F 694 2013-10-29 21:03:27Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -286,6 +286,19 @@
           CALL metrics (ng, tile, iADM)
         END DO
 !$OMP BARRIER
+
+# if defined WTYPE_GRID && defined ANA_WTYPE     && \
+    (defined LMD_SKPP   || defined SOLAR_SOURCE)
+!
+!-----------------------------------------------------------------------
+!  Set spatially varying Jerlov water type.
+!-----------------------------------------------------------------------
+!
+        DO tile=first_tile(ng),last_tile(ng),+1
+          CALL ana_wtype (ng, tile, iTLM)
+        END DO
+!$OMP BARRIER
+# endif
 !
 !-----------------------------------------------------------------------
 !  If appropriate, set nudging coefficiests time scales.
@@ -524,6 +537,22 @@
       END DO
 !$OMP BARRIER
 #endif
+!
+!-----------------------------------------------------------------------
+!  If applicable, check input multi-files where the time records for
+!  a particular field are split into several NetCDF files.  Initialize
+!  several parameters in the file structure so the appropriate input
+!  file is selected during initialization/restart.
+!-----------------------------------------------------------------------
+!
+!$OMP MASTER
+      CALL check_multifile (ng, iADM)
+!$OMP END MASTER
+# ifdef DISTRIBUTE
+      CALL mp_bcasti (ng, iADM, exit_flag)
+# endif
+!$OMP BARRIER
+      IF (exit_flag.ne.NoError) RETURN
 !
 !-----------------------------------------------------------------------
 !  Read in initial forcing, climatology and assimilation data from

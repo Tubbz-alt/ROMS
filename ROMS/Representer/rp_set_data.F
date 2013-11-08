@@ -2,7 +2,7 @@
 #ifdef TL_IOMS
       SUBROUTINE rp_set_data (ng, tile)
 !
-!svn $Id: rp_set_data.F 658 2013-04-18 22:17:05Z arango $
+!svn $Id: rp_set_data.F 689 2013-10-15 21:34:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -355,7 +355,11 @@
      &                     FORCES(ng)%sst,                              &
      &                     update)
       IF (exit_flag.ne.NoError) RETURN
-
+#   endif
+!
+#   ifdef ANA_DQDSST
+      CALL ana_dqdsst (ng, tile, iRPM)
+#   else
       CALL set_2dfld_tile (ng, tile, iRPM, iddQdT,                      &
      &                     LBi, UBi, LBj, UBj,                          &
      &                     FORCES(ng)%dqdtG,                            &

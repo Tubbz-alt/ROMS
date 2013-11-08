@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       MODULE mod_mixing
 !
-!svn $Id: mod_mixing.F 645 2013-01-22 23:21:54Z arango $
+!svn $Id: mod_mixing.F 689 2013-10-15 21:34:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -135,14 +135,14 @@
 !  Nonlinear model state.
 !
 #ifdef SOLVE3D
-# if defined LMD_SKPP || defined SOLAR_SOURCE
-          integer,  pointer :: Jwtype(:,:)
-# endif
 # if defined LMD_SKPP || defined LMD_BKPP
           integer,  pointer :: ksbl(:,:)
 #  ifdef LMD_BKPP
           integer,  pointer :: kbbl(:,:)
 #  endif
+# endif
+# if defined LMD_SKPP || defined SOLAR_SOURCE
+          real(r8),  pointer :: Jwtype(:,:)
 # endif
 #endif
 #if defined DIFF_3DCOEF && defined SOLVE3D
@@ -877,7 +877,7 @@
 # endif
 # if defined LMD_SKPP || defined SOLAR_SOURCE
           DO i=Imin,Imax
-            MIXING(ng) % Jwtype(i,j) = lmd_Jwt(ng)
+            MIXING(ng) % Jwtype(i,j) = REAL(lmd_Jwt(ng),r8)
           END DO
 # endif
 # if defined LMD_SKPP || defined LMD_BKPP

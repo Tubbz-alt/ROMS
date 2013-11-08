@@ -2,7 +2,7 @@
 #ifndef ANA_GRID
       SUBROUTINE get_grid (ng, model)
 !
-!svn $Id: get_grid.F 658 2013-04-18 22:17:05Z arango $
+!svn $Id: get_grid.F 689 2013-10-15 21:34:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -176,6 +176,15 @@
       END IF
       IF (.not.find_string(var_name,n_var,'mask_psi',vindex)) THEN
         IF (Master) WRITE (stdout,10) 'mask_psi', TRIM(ncname)
+        exit_flag=2
+        RETURN
+      END IF
+# endif
+# if defined WTYPE_GRID && \
+    (defined LMD_SKPP   || defined SOLAR_SOURCE) && \
+    !defined ANA_WTYPE
+      IF (.not.find_string(var_name,n_var,'wtype_grid',vindex)) THEN
+        IF (Master) WRITE (stdout,10) 'wtype_grid', TRIM(ncname)
         exit_flag=2
         RETURN
       END IF
@@ -490,6 +499,40 @@
      &                          NghostPoints,                           &
      &                          EWperiodic(ng), NSperiodic(ng),         &
      &                          GRID(ng) % zice)
+#  endif
+# endif
+# if defined WTYPE_GRID && \
+    (defined LMD_SKPP   || defined SOLAR_SOURCE) && \
+    !defined ANA_WTYPE
+!
+!  Read in Jerlov water type.
+!
+          CASE ('wtype_grid')
+            gtype=r2dvar
+            status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
+     &                        var_name(i), var_id(i), 0,                &
+     &                        gtype, Vsize, LBi, UBi, LBj, UBj,         &
+     &                        Fscl, Fmin, Fmax,                         &
+#  ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#  endif
+     &                        MIXING(ng) % Jwtype)
+            IF (status.ne.nf90_noerr) THEN
+              exit_flag=2
+              ioerror=status
+              EXIT
+            END IF
+            IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+              CALL exchange_r2d_tile (ng, tile,                         &
+     &                                LBi, UBi, LBj, UBj,               &
+     &                                MIXING(ng) % Jwtype)
+            END IF
+#  ifdef DISTRIBUTE
+            CALL mp_exchange2d (ng, tile, model, 1,                     &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          NghostPoints,                           &
+     &                          EWperiodic(ng), NSperiodic(ng),         &
+     &                          MIXING(ng) % Jwtype)
 #  endif
 # endif
 !

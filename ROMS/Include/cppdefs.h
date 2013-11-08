@@ -1,7 +1,7 @@
 /*
 ** Include file "cppdefs.h"
 **
-** svn $Id: cppdefs.h 658 2013-04-18 22:17:05Z arango $
+** svn $Id: cppdefs.h 689 2013-10-15 21:34:03Z arango $
 ********************************************************** Hernan G. Arango ***
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -91,6 +91,7 @@
 ** SOLAR_SOURCE        use if solar radiation source term                    **
 ** SRELAXATION         use if salinity relaxation as a freshwater flux       **
 ** TS_PSOURCE          use to turn ON or OFF point Sources/Sinks             **
+** WTYPE_GRID          use to turn ON spatially varying Jerlov water type    **
 **                                                                           **
 ** Tracer advection OPTIONS for adjoint-based algorithms:                    **
 **                                                                           **
@@ -215,6 +216,7 @@
 ** ANA_BTFLUX          use if analytical bottom temperature flux             **
 ** ANA_CLOUD           use if analytical cloud fraction                      **
 ** ANA_DIAG            use if customized diagnostics                         **
+** ANA_DQDSST          use if analytical surface heat flux sensitivity to SST**
 ** ANA_DRAG            use if analytical spatially varying drag parameters   **
 ** ANA_FSOBC           use if analytical free-surface boundary conditions    **
 ** ANA_GRID            use if analytical model grid set-up                   **
@@ -238,7 +240,7 @@
 ** ANA_SSFLUX          use if analytical surface salinity flux               **
 ** ANA_SSH             use if analytical sea surface height                  **
 ** ANA_SSS             use if analytical sea surface salinity                **
-** ANA_SST             use if analytical SST and dQdSST                      **
+** ANA_SST             use if analytical sea surface temperature, SST        **
 ** ANA_STFLUX          use if analytical surface net heat flux               **
 ** ANA_TAIR            use if analytical surface air temperature             **
 ** ANA_TCLIMA          use if analytical tracers climatology                 **

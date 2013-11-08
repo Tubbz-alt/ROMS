@@ -2,7 +2,7 @@
 #ifdef ADJOINT
       SUBROUTINE ad_set_data (ng, tile)
 !
-!svn $Id: ad_set_data.F 680 2013-08-12 21:58:57Z arango $
+!svn $Id: ad_set_data.F 689 2013-10-15 21:34:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -350,7 +350,11 @@
      &                      FORCES(ng)%sst,                             &
      &                      update)
       IF (exit_flag.ne.NoError) RETURN
-
+#   endif
+!
+#   ifdef ANA_DQDSST
+      CALL ana_dqdsst (ng, tile, iADM)
+#   else
       CALL set_2dfldr_tile (ng, tile, iADM, iddQdT,                     &
      &                      LBi, UBi, LBj, UBj,                         &
      &                      FORCES(ng)%dqdtG,                           &

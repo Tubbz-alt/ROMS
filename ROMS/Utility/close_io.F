@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE close_inp (ng, model)
 !
-!svn $Id: close_io.F 645 2013-01-22 23:21:54Z arango $
+!svn $Id: close_io.F 689 2013-10-15 21:34:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -288,7 +288,7 @@
 !
       IF (Master) THEN
         First=.TRUE.
-        DO i=1,37
+        DO i=1,39
           IF ((LEN_TRIM(ANANAME(i)).gt.0).and.(exit_flag.ne.5)) THEN
             IF (First) THEN
               First=.FALSE.

@@ -2,7 +2,7 @@
       SUBROUTINE inquire (ng, model, job, Iout, Irec, Mrec, ifield,     &
      &                    ncid, Lmulti, nfiles, S)
 !
-!svn $Id: inquire.F 645 2013-01-22 23:21:54Z arango $
+!svn $Id: inquire.F 691 2013-10-24 21:33:19Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -234,7 +234,7 @@
               DO i=1,n_dim
                 IF (TRIM(dim_name(i)).eq.Tname(ifield)(1:lstr)) THEN
                   Nrec=dim_size(i)
-                ELSE IF (TRIM(dim_name(i)).eq.                         &
+                ELSE IF (TRIM(dim_name(i)).eq.                          &
      &                   Tname(ifield)(1:lstr-1)) THEN  ! There is a C
                   Nrec=dim_size(i)                      ! language null
                   Tname(ifield)=Tname(ifield)(1:lstr-1) ! termination
