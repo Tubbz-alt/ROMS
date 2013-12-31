@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE check_multifile (ng, model)
 !
-!svn $Id: check_multifile.F 696 2013-11-04 17:30:30Z arango $
+!svn $Id: check_multifile.F 697 2013-11-14 22:39:55Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -23,6 +23,8 @@
       USE mod_iounits
       USE mod_scalars
 !
+      implicit none
+!
 !  Imported variable declarations.
 !
       integer, intent(in) :: ng, model
@@ -32,7 +34,7 @@
       logical :: foundit
       logical :: check_file
 
-      integer :: Fcount, i, ifile
+      integer :: Fcount, i, ifile, lstr
 
       real(r8) :: Tmax, Tmin, Tscale
 
@@ -218,6 +220,8 @@
       USE mod_iounits
       USE mod_netcdf
       USE mod_scalars
+!
+      implicit none
 !
 !  Imported variable declarations.
 !

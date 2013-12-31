@@ -1,6 +1,6 @@
       SUBROUTINE ana_m3obc (ng, tile, model)
 !
-!! svn $Id: ana_m3obc.h 658 2013-04-18 22:17:05Z arango $
+!! svn $Id: ana_m3obc.h 697 2013-11-14 22:39:55Z arango $
 !!======================================================================
 !! Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !!   Licensed under a MIT/X style license                              !
@@ -47,7 +47,10 @@
 !
       USE mod_param
       USE mod_boundary
+      USE mod_grid
       USE mod_ncparam
+      USE mod_ocean
+      USE mod_scalars
 !
 !  Imported variable declarations.
 !

@@ -1,7 +1,7 @@
 /*
 ** Include file "cppdefs.h"
 **
-** svn $Id: cppdefs.h 689 2013-10-15 21:34:03Z arango $
+** svn $Id: cppdefs.h 701 2013-11-25 21:19:06Z arango $
 ********************************************************** Hernan G. Arango ***
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -43,8 +43,6 @@
 ** UV_LOGDRAG          use to turn ON or OFF logarithmic bottom friction     **
 ** UV_LDRAG            use to turn ON or OFF linear bottom friction          **
 ** UV_QDRAG            use to turn ON or OFF quadratic bottom friction       **
-** UV_PSOURCE          use to turn ON or OFF point Sources/Sinks             **
-** Q_PSOURCE           use to turn ON or OFF mass point Sources              **
 **                                                                           **
 ** OPTION to not allow the bottom stress components to change the direction  **
 ** of bottom momentum (change sign of velocity components.                   **
@@ -90,7 +88,6 @@
 ** SCORRECTION         use if freshwater flux correction                     **
 ** SOLAR_SOURCE        use if solar radiation source term                    **
 ** SRELAXATION         use if salinity relaxation as a freshwater flux       **
-** TS_PSOURCE          use to turn ON or OFF point Sources/Sinks             **
 ** WTYPE_GRID          use to turn ON spatially varying Jerlov water type    **
 **                                                                           **
 ** Tracer advection OPTIONS for adjoint-based algorithms:                    **
@@ -501,6 +498,11 @@
 ** SED_DENS            use to activate sediment to affect equation of state  **
 ** SED_MORPH           use to allow bottom model elevation to evolve         **
 ** SUSPLOAD            use to activate suspended load transport              **
+**                                                                           **
+** OPTIONS for grid nesting:                                                 **
+**                                                                           **
+** NESTING             use to activate grid nesting: composite/refinement    **
+** ONE_WAY             use if one-way nesting in refinement grids            **
 **                                                                           **
 ** OPTIONS for two-way coupling to other models:                             **
 **                                                                           **

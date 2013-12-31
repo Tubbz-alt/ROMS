@@ -1,5 +1,5 @@
 /*
-** svn $Id: nena.h 645 2013-01-22 23:21:54Z arango $
+** svn $Id: nena.h 701 2013-11-25 21:19:06Z arango $
 *******************************************************************************
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -18,11 +18,9 @@
 #define UV_COR
 #define UV_QDRAG
 #define UV_VIS2
-#define UV_PSOURCE
 #define MIX_S_UV
 #define TS_U3HADVECTION
 #define TS_SVADVECTION
-#define TS_PSOURCE
 #define SOLVE3D
 #define SALINITY
 #define NONLIN_EOS

@@ -1,6 +1,6 @@
       SUBROUTINE ana_m3obc (ng, tile, model)
 !
-!! svn $Id: ana_m3obc.h 658 2013-04-18 22:17:05Z arango $
+!! svn $Id: ana_m3obc.h 697 2013-11-14 22:39:55Z arango $
 !!======================================================================
 !! Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !!   Licensed under a MIT/X style license                              !
@@ -47,7 +47,10 @@
 !
       USE mod_param
       USE mod_boundary
+      USE mod_grid
       USE mod_ncparam
+      USE mod_ocean
+      USE mod_scalars
 !
 !  Imported variable declarations.
 !
@@ -73,10 +76,13 @@
         fac=5.0E-06_r8
         DO k=1,N(ng)
           DO j=JstrT,JendT
-            val=0.5_r8*(zeta(0 ,j,knew)+h(0 ,j)+                        &
-     &                  zeta(1 ,j,knew)+h(1 ,j))
-            BOUNDARY(ng)%u_west(j,k)=-LOG((val+0.5*(z_r(Istr-1,j,k)+    &
-     &                                              z_r(Istr  ,j,k)))/  &
+            val=0.5_r8*(OCEAN(ng)%zeta(0 ,j,knew)+                      &
+     &                  GRID(ng)%h(0 ,j)+                               &
+     &                  OCEAN(ng)%zeta(1 ,j,knew)+                      &
+     &                  GRID(ng)%h(1 ,j))
+            BOUNDARY(ng)%u_west(j,k)=-LOG((val+0.5*
+     %                                     (GRID(ng)%z_r(Istr-1,j,k)+   &
+     &                                      GRID(ng)%z_r(Istr  ,j,k)))/ &
      &                                    fac)/                         &
      &                               (LOG(val/fac)-1.0_r8+fac/val)
           END DO
@@ -92,10 +98,13 @@
         fac=5.0E-06_r8
         DO k=1,N(ng)
           DO j=JstrT,JendT
-            val=0.5_r8*(zeta(Iend  ,j,knew)+h(Iend  ,j)+                &
-     &                  zeta(Iend+1,j,knew)+h(Iend+1,j))
-            BOUNDARY(ng)%u_east(j,k)=-LOG((val+0.5*(z_r(Iend  ,j,k)+    &
-     &                                              z_r(Iend+1,j,k)))/  &
+            val=0.5_r8*(OCEAN(ng)%zeta(Iend  ,j,knew)+                  &
+     &                  GRID(ng)%h(Iend  ,j)+                           &
+     &                  OCEAN(ng)%zeta(Iend+1,j,knew)+                  &
+     %                  GRID(ng)%h(Iend+1,j))
+            BOUNDARY(ng)%u_east(j,k)=-LOG((val+0.5*
+     &                                     (GRID(ng)%z_r(Iend  ,j,k)+   &
+     &                                      GRID(ng)%z_r(Iend+1,j,k)))/ &
      &                                    fac)/                         &
      &                               (LOG(val/fac)-1.0_r8+fac/val)
           END DO

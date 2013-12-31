@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE mod_arrays (allocate_vars)
 !
-!svn $Id: mod_arrays.F 658 2013-04-18 22:17:05Z arango $
+!svn $Id: mod_arrays.F 701 2013-11-25 21:19:06Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -15,6 +15,7 @@
 !
       USE mod_param
       USE mod_parallel
+      USE mod_scalars
 !
 #if defined AVERAGES    || \
    (defined AD_AVERAGES && defined ADJOINT) || \
@@ -47,9 +48,7 @@
 #if defined SEDIMENT || defined BBL_MODEL
       USE mod_sedbed, ONLY : allocate_sedbed, initialize_sedbed
 #endif
-#if defined UV_PSOURCE || defined TS_PSOURCE || defined Q_PSOURCE
       USE mod_sources, ONLY : allocate_sources
-#endif
 #if defined SSH_TIDES || defined UV_TIDES
       USE mod_tides, ONLY : allocate_tides, initialize_tides
 #endif
@@ -136,9 +135,9 @@
 #if defined SSH_TIDES || defined UV_TIDES
           CALL allocate_tides (ng, LBi, UBi, LBj, UBj)
 #endif
-#if defined UV_PSOURCE || defined TS_PSOURCE || defined Q_PSOURCE
-          CALL allocate_sources (ng)
-#endif
+          IF (LuvSrc(ng).or.LwSrc(ng).or.ANY(LtracerSrc(:,ng))) THEN
+            CALL allocate_sources (ng)
+          END IF
 !$OMP END MASTER
 !$OMP BARRIER
         END DO

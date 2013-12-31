@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       MODULE mod_ncparam
 !
-!svn $Id: mod_ncparam.F 689 2013-10-15 21:34:03Z arango $
+!svn $Id: mod_ncparam.F 705 2013-12-17 00:23:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -71,8 +71,8 @@
 !  Maximum number of variables in a generic NetCDF file (MV) and
 !  maximum number of variables in information arrays (NV).
 !
-        integer, parameter :: MV = 950
-        integer, parameter :: NV = 950
+        integer, parameter :: MV = 1300
+        integer, parameter :: NV = 1300
 !
 !  Input/output grid-type variables.
 !
@@ -712,7 +712,7 @@
 !  Analytical files switch and names.
 !
       Lanafile=.TRUE.
-      DO i=1,38
+      DO i=1,SIZE(ANANAME)
         DO j=1,LEN(ANANAME(1))
           ANANAME(i)(j:j)=' '
         END DO
@@ -1334,18 +1334,6 @@
               idUVav=varid
             CASE ('idVVav')
               idVVav=varid
-# ifdef SALINITY
-            CASE ('idTTav(isalt)')
-              idTTav(isalt)=varid
-            CASE ('iHUTav(isalt)')
-              iHUTav(isalt)=varid
-            CASE ('iHVTav(isalt)')
-              iHVTav(isalt)=varid
-            CASE ('idUTav(isalt)')
-              idUTav(isalt)=varid
-            CASE ('idVTav(isalt)')
-              idVTav(isalt)=varid
-# endif
 #endif
 #ifdef T_PASSIVE
             CASE ('idTvar(inert(i))')
@@ -1358,10 +1346,8 @@
               load=.TRUE.
             CASE ('idTbry(inorth,inert(i))')
               load=.TRUE.
-# ifdef TS_PSOURCE
             CASE ('idRtrc(inert(i))')
               load=.TRUE.
-# endif
 #endif
             CASE ('id2dPV')
               id2dPV=varid
@@ -1727,7 +1713,6 @@
      &                    TRIM(ADJUSTL(Vinfo(5)))
                   END DO
                 END IF
-# ifdef TS_PSOURCE
               CASE ('idRtrc(inert(i))')
                 IF (NPT.gt.0) THEN
                   varid=varid-1
@@ -1750,7 +1735,6 @@
      &                    TRIM(ADJUSTL(Vinfo(5)))
                   END DO
                 END IF
-# endif
             END SELECT
 #endif
 #ifdef DIAGNOSTICS_TS
@@ -2010,7 +1994,7 @@
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,a)')                        &
-     &                  TRIM(ADJUSTL(Vname(1,idTvar(i)))), '2'
+     &                  TRIM(ADJUSTL(Vname(1,idTvar(i)))), '_2'
                   WRITE (Vname(2,varid),'(a,1x,a)')                     &
      &                  'time-averaged squared',                        &
      &                  TRIM(ADJUSTL(Vname(2,idTvar(i))))
@@ -2037,7 +2021,7 @@
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,a)')                        &
-     &                  'Huon', TRIM(ADJUSTL(Vname(1,idTvar(i))))
+     &                  'Huon_', TRIM(ADJUSTL(Vname(1,idTvar(i))))
                   WRITE (Vname(2,varid),'(a,1x,a,1x,a)')                &
      &                  'time-averaged',                                &
      &                  TRIM(ADJUSTL(Vname(2,idTvar(i)))),              &
@@ -2066,7 +2050,7 @@
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,a)')                        &
-     &                  'u', TRIM(ADJUSTL(Vname(1,idTvar(i))))
+     &                  'u_', TRIM(ADJUSTL(Vname(1,idTvar(i))))
                   WRITE (Vname(2,varid),'(a,1x,a)')                     &
      &                  'time-averaged u-momentum times',               &
      &                  TRIM(ADJUSTL(Vname(2,idTvar(i))))
@@ -2094,7 +2078,7 @@
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,a)')                        &
-     &                  'Hvom', TRIM(ADJUSTL(Vname(1,idTvar(i))))
+     &                  'Hvom_', TRIM(ADJUSTL(Vname(1,idTvar(i))))
                   WRITE (Vname(2,varid),'(a,1x,a,1x,a)')                &
      &                  'time-averaged',                                &
      &                  TRIM(ADJUSTL(Vname(2,idTvar(i)))),              &
@@ -2123,7 +2107,7 @@
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,a)')                        &
-     &                  'v', TRIM(ADJUSTL(Vname(1,idTvar(i))))
+     &                  'v_', TRIM(ADJUSTL(Vname(1,idTvar(i))))
                   WRITE (Vname(2,varid),'(a,1x,a)')                     &
      &                  'time-averaged v-momentum times',               &
      &                  TRIM(ADJUSTL(Vname(2,idTvar(i))))

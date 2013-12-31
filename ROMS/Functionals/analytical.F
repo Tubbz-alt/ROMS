@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       MODULE analytical_mod
 !
-!svn $Id: analytical.F 689 2013-10-15 21:34:03Z arango $
+!svn $Id: analytical.F 701 2013-11-25 21:19:06Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -163,8 +163,7 @@
 #  include <ana_perturb.h>
 # endif
 
-# if (defined TS_PSOURCE || defined UV_PSOURCE || defined Q_PSOURCE) && \
-     defined ANA_PSOURCE
+# if defined ANA_PSOURCE
 #  include <ana_psource.h>
 # endif
 

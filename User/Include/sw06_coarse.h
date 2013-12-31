@@ -1,5 +1,5 @@
 /*
-** svn $Id: sw06_coarse.h 645 2013-01-22 23:21:54Z arango $
+** svn $Id: sw06_coarse.h 701 2013-11-25 21:19:06Z arango $
 *******************************************************************************
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -53,8 +53,6 @@
 # undef  AVERAGES
 # define MASKING
 # define SPLINES
-# undef  UV_PSOURCE
-# undef  TS_PSOURCE
 # define SOLAR_SOURCE
 
 # define GLS_MIXING
@@ -117,8 +115,6 @@
 # undef  AVERAGES
 # define MASKING
 # define SPLINES
-# undef  UV_PSOURCE
-# undef  TS_PSOURCE
 # define SOLAR_SOURCE
 
 # define GLS_MIXING
