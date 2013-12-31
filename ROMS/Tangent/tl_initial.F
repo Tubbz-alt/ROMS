@@ -2,7 +2,7 @@
 #ifdef TANGENT
       SUBROUTINE tl_initial (ng)
 !
-!svn $Id: tl_initial.F 694 2013-10-29 21:03:27Z arango $
+!svn $Id: tl_initial.F 701 2013-11-25 21:19:06Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -608,8 +608,7 @@
 !!$OMP BARRIER
 # endif
 
-#if defined ANA_PSOURCE && \
-   (defined UV_PSOURCE  || defined TS_PSOURCE || defined Q_PSOURCE)
+#ifdef ANA_PSOURCE
 !
 !-----------------------------------------------------------------------
 !  Set point Sources/Sinks position, direction, special flag, and mass
@@ -618,9 +617,11 @@
 !  to process internal Land/Sea masking arrays during initialization.
 !-----------------------------------------------------------------------
 !
-      DO tile=first_tile(ng),last_tile(ng),+1
-        CALL ana_psource (ng, tile, iTLM)
-      END DO
+      IF (LuvSrc(ng).or.LwSrc(ng).or.ANY(LtracerSrc(:,ng))) THEN
+        DO tile=first_tile(ng),last_tile(ng),+1
+          CALL ana_psource (ng, tile, iTLM)
+        END DO
+      END IF
 !$OMP BARRIER
 #endif
 !
@@ -648,9 +649,7 @@
 !
 !$OMP MASTER
       CALL close_inp (ng, iTLM)
-# ifdef TIMELESS_DATA
       CALL tl_get_idata (ng)
-# endif
       CALL tl_get_data (ng)
 !$OMP END MASTER
 !$OMP BARRIER

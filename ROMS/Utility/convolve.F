@@ -3,7 +3,7 @@
 
 #ifdef FOUR_DVAR
 !
-!svn $Id: convolve.F 680 2013-08-12 21:58:57Z arango $
+!svn $Id: convolve.F 701 2013-11-25 21:19:06Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -282,7 +282,9 @@
           CALL ad_variability (ng, tile, Rold(ng), Lweak)
           CALL ad_convolution (ng, tile, Rold(ng), Lweak, 2)
           CALL initialize_ocean (ng, tile, iTLM)
+# if defined ADJUST_STFLUX || defined ADJUST_WSTRESS
           CALL initialize_forces (ng, tile, iTLM)
+# endif
         END DO
 !$OMP END PARALLEL
       END DO
@@ -460,7 +462,9 @@
               CALL ad_variability (ng, tile, Rold(ng), Lweak)
               CALL ad_convolution (ng, tile, Rold(ng), Lweak, 2)
               CALL initialize_ocean (ng, tile, iTLM)
+# if defined ADJUST_STFLUX || defined ADJUST_WSTRESS
               CALL initialize_forces (ng, tile, iTLM)
+# endif
             END DO
 !$OMP END PARALLEL
 !

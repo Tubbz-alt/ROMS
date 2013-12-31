@@ -1,5 +1,5 @@
 /*
-** svn $Id: nemuro_var.h 645 2013-01-22 23:21:54Z arango $
+** svn $Id: nemuro_var.h 701 2013-11-25 21:19:06Z arango $
 *************************************************** Hernan G. Arango ***
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group                        **
 **   Licensed under a MIT/X style license                             **
@@ -146,7 +146,6 @@
               CASE ('idTbry(inorth,iopal)')
                 idTbry(inorth,iopal)=varid
 
-#ifdef TS_PSOURCE
 
 /*
 **  Biological tracers point Source/Sinks (river runoff).
@@ -160,4 +159,3 @@
                 idRtrc(iDON_)=varid
               CASE ('idRtrc(iPON_)')
                 idRtrc(iPON_)=varid
-#endif

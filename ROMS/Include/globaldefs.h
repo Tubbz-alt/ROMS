@@ -1,7 +1,7 @@
 /*
 ** Include file "globaldef.h"
 **
-** svn $Id: globaldefs.h 691 2013-10-24 21:33:19Z arango $
+** svn $Id: globaldefs.h 701 2013-11-25 21:19:06Z arango $
 ********************************************************** Hernan G. Arango ***
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group     Alexander F. Shchepetkin  **
 **   Licensed under a MIT/X style license                                    **
@@ -690,8 +690,6 @@
     ( defined LMD_SKPP     && !defined ANA_SRFLUX)   || \
     ( defined SALINITY     && !defined ANA_SSFLUX)   || \
     ( defined SOLAR_SOURCE && !defined ANA_SRFLUX)   || \
-   (( defined TS_PSOURCE   || defined UV_PSOURCE     || \
-      defined Q_PSOURCE)   && !defined ANA_PSOURCE)  || \
     ( defined  SSH_TIDES   || defined UV_TIDES)      || \
     ( defined BBL_MODEL    && (!defined ANA_WWAVE    && \
      !defined WAVES_OCEAN))                          || \
@@ -706,16 +704,6 @@
     ( defined  SSH_TIDES   || defined UV_TIDES)
 #  define FRC_FILE
 # endif
-#endif
-
-/*
-** Check if processing timeless data.
-*/
-
-#if (defined UV_PSOURCE || defined TS_PSOURCE || \
-     defined Q_PSOURCE) || \
-    (defined  SSH_TIDES || defined UV_TIDES)
-# define TIMELESS_DATA
 #endif
 
 /*

@@ -1,6 +1,6 @@
       SUBROUTINE ana_biology (ng, tile, model)
 !
-!! svn $Id: ana_biology.h 658 2013-04-18 22:17:05Z arango $
+!! svn $Id: ana_biology.h 705 2013-12-17 00:23:03Z arango $
 !!======================================================================
 !! Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !!   Licensed under a MIT/X style license                              !
@@ -128,6 +128,8 @@
 !  Nemuro lower trophic level ecosystem model.
 !-----------------------------------------------------------------------
 !
+      cff1=20.0_r8/3.0_r8
+      cff2= 2.0_r8/3.0_r8
       DO k=1,N(ng)
         DO j=JstrT,JendT
           DO i=IstrT,IendT

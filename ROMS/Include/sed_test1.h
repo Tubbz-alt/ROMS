@@ -1,5 +1,5 @@
 /*
-** svn $Id: sed_test1.h 645 2013-01-22 23:21:54Z arango $
+** svn $Id: sed_test1.h 701 2013-11-25 21:19:06Z arango $
 *******************************************************************************
 ** Copyright (c) 2002-2013 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -14,7 +14,6 @@
 */
 
 #define UV_ADV
-#define UV_PSOURCE
 #define UV_LOGDRAG
 #define UV_VIS4
 #define MIX_S_UV

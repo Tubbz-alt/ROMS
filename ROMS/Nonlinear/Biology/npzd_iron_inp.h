@@ -1,6 +1,6 @@
       SUBROUTINE read_BioPar (model, inp, out, Lwrite)
 !
-!svn $Id: npzd_iron_inp.h 664 2013-05-21 23:22:32Z arango $
+!svn $Id: npzd_iron_inp.h 705 2013-12-17 00:23:03Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -207,7 +207,8 @@
               END IF
               ifield=isTvar(idbio(itracer))
               Npts=load_lbc(Nval, Cval, line, nline, ifield, igrid,     &
-     &                      iTrcStr, iTrcEnd, LBC)
+     &                      iTrcStr, iTrcEnd,                           &
+     &                      Vname(1,idTvar(idbio(itracer))), LBC)
 #if defined ADJOINT || defined TANGENT || defined TL_IOMS
             CASE ('ad_LBC(isTvar)')
               IF (itracer.lt.NBT) THEN
@@ -217,7 +218,8 @@
               END IF
               ifield=isTvar(idbio(itracer))
               Npts=load_lbc(Nval, Cval, line, nline, ifield, igrid,     &
-     &                      iTrcStr, iTrcEnd, ad_LBC)
+     &                      iTrcStr, iTrcEnd,                           &
+     &                      Vname(1,idTvar(idbio(itracer))), ad_LBC)
 #endif
 #ifdef TCLIMATOLOGY
             CASE ('LtracerCLM')
@@ -229,7 +231,6 @@
                 END DO
               END DO
 #endif
-#ifdef TS_PSOURCE
             CASE ('LtracerSrc')
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids
@@ -238,7 +239,6 @@
                   LtracerSrc(i,ng)=Ltrc(itrc,ng)
                 END DO
               END DO
-#endif
             CASE ('Hout(idTvar)')
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids
@@ -276,6 +276,46 @@
               DO ng=1,Ngrids
                 DO itrc=1,NBT
                   i=idTvar(idbio(itrc))
+                  Aout(i,ng)=Ltrc(itrc,ng)
+                END DO
+              END DO
+            CASE ('Aout(idTTav)')
+              Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
+              DO ng=1,Ngrids
+                DO itrc=1,NBT
+                  i=idTTav(idbio(itrc))
+                  Aout(i,ng)=Ltrc(itrc,ng)
+                END DO
+              END DO
+            CASE ('Aout(idUTav)')
+              Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
+              DO ng=1,Ngrids
+                DO itrc=1,NBT
+                  i=idUTav(idbio(itrc))
+                  Aout(i,ng)=Ltrc(itrc,ng)
+                END DO
+              END DO
+            CASE ('Aout(idVTav)')
+              Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
+              DO ng=1,Ngrids
+                DO itrc=1,NBT
+                  i=idVTav(idbio(itrc))
+                  Aout(i,ng)=Ltrc(itrc,ng)
+                END DO
+              END DO
+            CASE ('Aout(iHUTav)')
+              Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
+              DO ng=1,Ngrids
+                DO itrc=1,NBT
+                  i=iHUTav(idbio(itrc))
+                  Aout(i,ng)=Ltrc(itrc,ng)
+                END DO
+              END DO
+            CASE ('Aout(iHVTav)')
+              Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
+              DO ng=1,Ngrids
+                DO itrc=1,NBT
+                  i=iHVTav(idbio(itrc))
                   Aout(i,ng)=Ltrc(itrc,ng)
                 END DO
               END DO
@@ -523,19 +563,23 @@
      &              'Nudging/relaxation time scale (days)',             &
      &              'for tracer ', i, TRIM(Vname(1,idTvar(i)))
             END DO
+            DO itrc=1,NBT
+              i=idbio(itrc)
+              IF (LtracerSrc(i,ng)) THEN
+                WRITE (out,100) LtracerSrc(i,ng), 'LtracerSrc',         &
+     &              i, 'Turning ON  point sources/Sink on tracer ', i,  &
+     &              TRIM(Vname(1,idTvar(i)))
+              ELSE
+                WRITE (out,100) LtracerSrc(i,ng), 'LtracerSrc',         &
+     &              i, 'Turning OFF point sources/Sink on tracer ', i,  &
+     &              TRIM(Vname(1,idTvar(i)))
+              END IF
+            END DO
 #ifdef TCLIMATOLOGY
             DO itrc=1,NBT
               i=idbio(itrc)
               WRITE (out,100) LtracerCLM(i,ng), 'LtracerCLM',           &
      &              i, 'Processing climatology on tracer ', i,          &
-     &              TRIM(Vname(1,idTvar(i)))
-            END DO
-#endif
-#ifdef TS_PSOURCE
-            DO itrc=1,NBT
-              i=idbio(itrc)
-              WRITE (out,100) LtracerSrc(i,ng), 'LtracerSrc',           &
-     &              i, 'Processing point sources/Sink on tracer ', i,   &
      &              TRIM(Vname(1,idTvar(i)))
             END DO
 #endif
@@ -561,6 +605,41 @@
               IF (Aout(idTvar(i),ng)) WRITE (out,110)                   &
      &            Aout(idTvar(i),ng), 'Aout(idTvar)',                   &
      &            'Write out averaged tracer ', i,                      &
+     &            TRIM(Vname(1,idTvar(i)))
+            END DO
+            DO itrc=1,NBT
+              i=idbio(itrc)
+              IF (Aout(idTTav(i),ng)) WRITE (out,110)                   &
+     &            Aout(idTTav(i),ng), 'Aout(idTTav)',                   &
+     &            'Write out averaged <t*t> for tracer ', i,            &
+     &            TRIM(Vname(1,idTvar(i)))
+            END DO
+            DO itrc=1,NBT
+              i=idbio(itrc)
+              IF (Aout(idUTav(i),ng)) WRITE (out,110)                   &
+     &            Aout(idUTav(i),ng), 'Aout(idUTav)',                   &
+     &            'Write out averaged <u*t> for tracer ', i,            &
+     &            TRIM(Vname(1,idTvar(i)))
+            END DO
+            DO itrc=1,NBT
+              i=idbio(itrc)
+              IF (Aout(idVTav(i),ng)) WRITE (out,110)                   &
+     &            Aout(idVTav(i),ng), 'Aout(idVTav)',                   &
+     &            'Write out averaged <v*t> for tracer ', i,            &
+     &            TRIM(Vname(1,idTvar(i)))
+            END DO
+            DO itrc=1,NBT
+              i=idbio(itrc)
+              IF (Aout(iHUTav(i),ng)) WRITE (out,110)                   &
+     &            Aout(iHUTav(i),ng), 'Aout(iHUTav)',                   &
+     &            'Write out averaged <Huon*t> for tracer ', i,         &
+     &            TRIM(Vname(1,idTvar(i)))
+            END DO
+            DO itrc=1,NBT
+              i=idbio(itrc)
+              IF (Aout(iHVTav(i),ng)) WRITE (out,110)                   &
+     &            Aout(iHVTav(i),ng), 'Aout(iHVTav)',                   &
+     &            'Write out averaged <Hvom*t> for tracer ', i,         &
      &            TRIM(Vname(1,idTvar(i)))
             END DO
 #endif
@@ -641,7 +720,7 @@
      &            TRIM(Vname(1,idTvar(itrc)))
             END DO
 #endif
-          END SELECT
+          END IF
         END DO
       END IF
 !
