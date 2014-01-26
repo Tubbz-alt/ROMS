@@ -2,9 +2,9 @@
 #if defined AVERAGES_DETIDE && (defined SSH_TIDES || defined UV_TIDES)
       SUBROUTINE wrt_tides (ng)
 !
-!svn $Id: wrt_tides.F 670 2013-06-10 20:46:01Z arango $
+!svn $Id: wrt_tides.F 709 2014-01-23 20:09:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================

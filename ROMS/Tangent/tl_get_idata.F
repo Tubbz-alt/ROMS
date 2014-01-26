@@ -2,9 +2,9 @@
 #ifdef TANGENT
       SUBROUTINE tl_get_idata (ng)
 !
-!svn $Id: tl_get_idata.F 701 2013-11-25 21:19:06Z arango $
+!svn $Id: tl_get_idata.F 709 2014-01-23 20:09:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================

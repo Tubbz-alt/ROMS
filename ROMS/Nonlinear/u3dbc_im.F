@@ -2,9 +2,9 @@
       MODULE u3dbc_mod
 #ifdef SOLVE3D
 !
-!svn $Id: u3dbc_im.F 645 2013-01-22 23:21:54Z arango $
+!svn $Id: u3dbc_im.F 709 2014-01-23 20:09:38Z arango $
 !=======================================================================
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                           Hernan G. Arango   !
 !========================================== Alexander F. Shchepetkin ===
