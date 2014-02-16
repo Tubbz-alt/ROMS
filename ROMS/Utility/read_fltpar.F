@@ -266,7 +266,8 @@
                IF (Fdt(i,ng).gt.0.0_r8) THEN
                   count = count+1
                END IF
-               nlimit = Fcount(i,ng) ** (1.0/count)
+               ! This must work exactly
+               nlimit = floor(Fcount(i,ng) ** (1.0/count))
                ! Now figure out individual loop limits
                xlimit = 1
                ylimit = 1
@@ -287,7 +288,7 @@
                print *,'nlimit = ',nlimit,'xlimit = ',xlimit
                print *,'ylimit = ', ylimit,'zlimit = ', zlimit
                print *,'tlimit = ',tlimit      
-               print *,'distributing floats in x,y,z,t'
+               print *,'Distributing floats in x,y,z,t'
                DO ii=1,xlimit
                   DO jj=1,ylimit
                      DO kk=1,zlimit
