@@ -2776,6 +2776,8 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+
+#if defined SALINITY
 #if defined TS_DIF2
         Vinfo( 1)='diff2_s'
         Vinfo( 2)='harmonic diffusivity - salt'
@@ -2801,6 +2803,7 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+#endif 
 
 #endif
 !

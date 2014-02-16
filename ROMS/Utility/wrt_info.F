@@ -1426,6 +1426,7 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
+#if defined SALINITY
             IF (find_string(var_name, n_var, 'diff2_s', varid)) THEN
               status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
      &                           LBi, UBi, LBj, UBj, scale,             &
@@ -1444,7 +1445,7 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
-
+#endif
 #endif
 #if defined TS_DIF4
             IF (find_string(var_name, n_var, 'diff4_t', varid)) THEN
@@ -1465,7 +1466,7 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
-
+#if defined SALINITY
             IF (find_string(var_name, n_var, 'diff4_s', varid)) THEN
               status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
      &                           LBi, UBi, LBj, UBj, scale,             &
@@ -1485,6 +1486,7 @@
               ioerror=nf90_enotvar
             END IF
 
+#endif
 #endif
           END IF
         END IF
