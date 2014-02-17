@@ -25,9 +25,9 @@
 
 #ifdef PROPAGATOR
 !
-!svn $Id: packing.F 685 2013-09-11 21:05:00Z arango $
+!svn $Id: packing.F 709 2014-01-23 20:09:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group       Andrew M. Moore   !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================

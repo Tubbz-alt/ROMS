@@ -2,9 +2,9 @@
       MODULE step3d_t_mod
 #if !defined TS_FIXED && (defined NONLINEAR && defined SOLVE3D)
 !
-!svn $Id: step3d_t.F 701 2013-11-25 21:19:06Z arango $
+!svn $Id: step3d_t.F 709 2014-01-23 20:09:38Z arango $
 !=======================================================================
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                           Hernan G. Arango   !
 !========================================== Alexander F. Shchepetkin ===
@@ -138,7 +138,7 @@
 !
       USE mod_param
       USE mod_ncparam
-# ifdef NESTING
+# if defined NESTING && !defined ONE_WAY
       USE mod_nesting
 # endif
       USE mod_scalars
@@ -585,7 +585,7 @@
             END DO
           END IF
 
-# ifdef NESTING
+# if defined NESTING && !defined ONE_WAY
 !
 !  If refinement grids, extract tracer horizontal advection fluxes
 !  (Hz*u*T/n, Hz*v*T/m) at the grid contact boundary (physical

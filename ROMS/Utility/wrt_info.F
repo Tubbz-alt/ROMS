@@ -1,9 +1,9 @@
 #include "cppdefs.h"
       SUBROUTINE wrt_info (ng, model, ncid, ncname)
 !
-!svn $Id: wrt_info.F 701 2013-11-25 21:19:06Z arango $
+!svn $Id: wrt_info.F 709 2014-01-23 20:09:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -1426,6 +1426,7 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
+#if defined SALINITY
             IF (find_string(var_name, n_var, 'diff2_s', varid)) THEN
               status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
      &                           LBi, UBi, LBj, UBj, scale,             &
@@ -1444,7 +1445,7 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
-
+#endif
 #endif
 #if defined TS_DIF4
             IF (find_string(var_name, n_var, 'diff4_t', varid)) THEN
@@ -1465,7 +1466,7 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
-
+#if defined SALINITY
             IF (find_string(var_name, n_var, 'diff4_s', varid)) THEN
               status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
      &                           LBi, UBi, LBj, UBj, scale,             &
@@ -1485,6 +1486,7 @@
               ioerror=nf90_enotvar
             END IF
 
+#endif
 #endif
           END IF
         END IF

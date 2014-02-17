@@ -2,9 +2,9 @@
 #if defined NONLINEAR && defined SOLVE3D
       SUBROUTINE main3d (RunInterval)
 !
-!svn $Id: main3d.F 658 2013-04-18 22:17:05Z arango $
+!svn $Id: main3d.F 709 2014-01-23 20:09:38Z arango $
 !=======================================================================
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                           Hernan G. Arango   !
 !========================================== Alexander F. Shchepetkin ===
@@ -148,10 +148,11 @@
         NEST_LAYER : DO nl=1,NestLayers
 !
 !  Determine number of time steps to compute in each nested grid layer
-!  based on the specified time interval (seconds), RunInterval. Notice
-!  that RunInterval is set in the calling driver. Its value may span
-!  the full period of the simulation, or a multi-model coupling
-!  interval, or just a single step.
+!  based on the specified time interval (seconds), RunInterval. Non
+!  nesting applications have NestLayers=1. Notice that RunInterval is
+!  set in the calling driver. Its value may span the full period of the
+!  simulation, or a multi-model coupling interval, or just a single
+!  step.
 !
           CALL ntimesteps (nl, GridsInLayer(nl), iNLM, RunInterval,     &
      &                     Nsteps, Rsteps)

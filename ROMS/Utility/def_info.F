@@ -1,9 +1,9 @@
 #include "cppdefs.h"
       SUBROUTINE def_info (ng, model, ncid, ncname, DimIDs)
 !
-!svn $Id: def_info.F 701 2013-11-25 21:19:06Z arango $
+!svn $Id: def_info.F 709 2014-01-23 20:09:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -2776,6 +2776,8 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+
+#if defined SALINITY
 #if defined TS_DIF2
         Vinfo( 1)='diff2_s'
         Vinfo( 2)='harmonic diffusivity - salt'
@@ -2801,6 +2803,7 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+#endif 
 
 #endif
 !

@@ -2,9 +2,9 @@
 #ifdef FLOATS
       SUBROUTINE read_FltPar (model, inp, out, Lwrite)
 !
-!svn $Id: read_fltpar.F 658 2013-04-18 22:17:05Z arango $
+!svn $Id: read_fltpar.F 709 2014-01-23 20:09:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -266,7 +266,8 @@
                IF (Fdt(i,ng).gt.0.0_r8) THEN
                   count = count+1
                END IF
-               nlimit = Fcount(i,ng) ** (1.0/count)
+               ! This must work exactly
+               nlimit = floor(Fcount(i,ng) ** (1.0/count))
                ! Now figure out individual loop limits
                xlimit = 1
                ylimit = 1
@@ -287,7 +288,7 @@
                print *,'nlimit = ',nlimit,'xlimit = ',xlimit
                print *,'ylimit = ', ylimit,'zlimit = ', zlimit
                print *,'tlimit = ',tlimit      
-               print *,'distributing floats in x,y,z,t'
+               print *,'Distributing floats in x,y,z,t'
                DO ii=1,xlimit
                   DO jj=1,ylimit
                      DO kk=1,zlimit

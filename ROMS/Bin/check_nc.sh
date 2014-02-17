@@ -1,8 +1,8 @@
 #!/bin/csh -f
 
-# svn $Id: check_nc.sh 658 2013-04-18 22:17:05Z arango $
+# svn $Id: check_nc.sh 709 2014-01-23 20:09:38Z arango $
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# Copyright (c) 2002-2013 The ROMS/TOMS Group                           :::
+# Copyright (c) 2002-2014 The ROMS/TOMS Group                           :::
 #   Licensed under a MIT/X style license                                :::
 #   See License_ROMS.txt                                                :::
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::: David Robertson :::

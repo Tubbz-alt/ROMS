@@ -2,9 +2,9 @@
       MODULE set_tides_mod
 #if defined NONLINEAR && (defined SSH_TIDES || defined UV_TIDES)
 !
-!svn $Id: set_tides.F 696 2013-11-04 17:30:30Z arango $
+!svn $Id: set_tides.F 709 2014-01-23 20:09:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2013 The ROMS/TOMS Group        Robert Hetland   !
+!  Copyright (c) 2002-2014 The ROMS/TOMS Group        Robert Hetland   !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
