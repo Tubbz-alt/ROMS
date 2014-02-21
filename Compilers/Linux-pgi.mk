@@ -51,7 +51,7 @@
 #
 
 ifdef USE_NETCDF4
-        NC_CONFIG ?= nc-config
+        NC_CONFIG ?= nf-config
     NETCDF_INCDIR ?= $(shell $(NC_CONFIG) --prefix)/include
              LIBS := $(shell $(NC_CONFIG) --flibs)
 else
@@ -96,7 +96,7 @@ ifdef USE_DEBUG
 #          FFLAGS += -g
 else
 #          FFLAGS += -Bstatic -fastsse -Mipa=fast
-           FFLAGS += -O3
+           FFLAGS += -O3 -Kieee  -fast -fastsse
 endif
 
 # Save compiler flags without the MCT or ESMF libraries additions
