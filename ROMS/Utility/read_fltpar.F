@@ -285,10 +285,10 @@
                IF (Fdt(i,ng).gt.0.0_r8) THEN
                   tlimit = nlimit
                END IF
-               print *,'nlimit = ',nlimit,'xlimit = ',xlimit
-               print *,'ylimit = ', ylimit,'zlimit = ', zlimit
-               print *,'tlimit = ',tlimit      
-               print *,'Distributing floats in x,y,z,t'
+               !print *,'nlimit = ',nlimit,'xlimit = ',xlimit
+               !print *,'ylimit = ', ylimit,'zlimit = ', zlimit
+               !print *,'tlimit = ',tlimit      
+               !print *,'Distributing floats in x,y,z,t'
                DO ii=1,xlimit
                   DO jj=1,ylimit
                      DO kk=1,zlimit
