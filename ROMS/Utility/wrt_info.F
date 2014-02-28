@@ -1367,6 +1367,46 @@
         IF (exit_flag.eq.NoError) THEN
           IF (ncid.ne.STA(ng)%ncid) THEN
             scale=1.0_r8
+#if defined UV_LDRAG
+            IF (find_string(var_name, n_var, 'rdrag', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           GRID(ng) % rdrag,                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'rdrag', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'rdrag', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#endif
+#if defined UV_QDRAG
+            IF (find_string(var_name, n_var, 'rdrag2', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           GRID(ng) % rdrag2,                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'rdrag2', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'rdrag2', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#endif
 #if defined UV_VIS2
             IF (find_string(var_name, n_var, 'visc2_r', varid)) THEN
               status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &

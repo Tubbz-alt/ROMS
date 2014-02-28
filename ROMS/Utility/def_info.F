@@ -2721,11 +2721,47 @@
           IF (exit_flag.ne.NoError) RETURN
         END IF
 #endif
-!
-! Output viscosities and diffusivities if SPONGE is used
-!
 #if defined SPONGE
+!
+! Output viscosities and diffusivities since SPONGE is used
+!
+#if defined UV_LDRAG
+        Vinfo( 1)='rdrag'
+        Vinfo( 2)='Linear bottom drag'
+        Vinfo( 3)='meter per second'
+        Vinfo(14)='rdrag, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+        
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
 
+#endif
+#if defined UV_QDRAG
+        Vinfo( 1)='rdrag2'
+        Vinfo( 2)='Quadratic bottom drag'
+        Vinfo( 3)='n/a'
+        Vinfo(14)='rdrag2, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+#endif
 #if defined UV_VIS2
         Vinfo( 1)='visc2_r'
         Vinfo( 2)='harmonic viscosity _r'
@@ -2733,6 +2769,17 @@
         Vinfo(14)='visc2, scalar'
         Vinfo(22)='coordinates'
         Aval(5)=REAL(r2dvar,r8)
+
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+
 #endif
 #if defined UV_VIS4
         Vinfo( 1)='visc4_r'
@@ -2741,7 +2788,7 @@
         Vinfo(14)='visc4, scalar'
         Vinfo(22)='coordinates'
         Aval(5)=REAL(r2dvar,r8)
-#endif
+        
         IF (ncid.eq.STA(ng)%ncid) THEN
           status=def_var(ng, model, ncid, varid, NF_TYPE,               &
      &                   1, (/stadim/), Aval, Vinfo, ncname)
@@ -2751,6 +2798,7 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+#endif
 #if defined TS_DIF2
         Vinfo( 1)='diff2_t'
         Vinfo( 2)='harmonic diffusivity - temp'
@@ -2758,6 +2806,17 @@
         Vinfo(14)='diff2_t, scalar'
         Vinfo(22)='coordinates'
         Aval(5)=REAL(r2dvar,r8)
+
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+
 #endif
 #if defined TS_DIF4
         Vinfo( 1)='diff4_t'
@@ -2766,7 +2825,7 @@
         Vinfo(14)='diff4_t, scalar'
         Vinfo(22)='coordinates'
         Aval(5)=REAL(r2dvar,r8)
-#endif
+
         IF (ncid.eq.STA(ng)%ncid) THEN
           status=def_var(ng, model, ncid, varid, NF_TYPE,               &
      &                   1, (/stadim/), Aval, Vinfo, ncname)
@@ -2776,6 +2835,8 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
+
+#endif
 
 #if defined SALINITY
 #if defined TS_DIF2
@@ -2785,16 +2846,8 @@
         Vinfo(14)='diff2_s, scalar'
         Vinfo(22)='coordinates'
         Aval(5)=REAL(r2dvar,r8)
-#endif
-#if defined TS_DIF4
-        Vinfo( 1)='diff4_s'
-        Vinfo( 2)='biharmonic diffusivity - salt'
-        Vinfo( 3)='meter^4 per second'
-        Vinfo(14)='diff4_s, scalar'
-        Vinfo(22)='coordinates'
-        Aval(5)=REAL(r2dvar,r8)
-#endif
-        IF (ncid.eq.STA(ng)%ncid) THEN
+
+          IF (ncid.eq.STA(ng)%ncid) THEN
           status=def_var(ng, model, ncid, varid, NF_TYPE,               &
      &                   1, (/stadim/), Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
@@ -2803,8 +2856,30 @@
      &                   2, t2dgrd, Aval, Vinfo, ncname)
           IF (exit_flag.ne.NoError) RETURN
         END IF
-#endif 
 
+#endif
+#if defined TS_DIF4
+        Vinfo( 1)='diff4_s'
+        Vinfo( 2)='biharmonic diffusivity - salt'
+        Vinfo( 3)='meter^4 per second'
+        Vinfo(14)='diff4_s, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+
+          IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+
+#endif
+! end salinity block
+#endif 
+! end SPONGE block
 #endif
 !
 !  Coriolis Parameter.
