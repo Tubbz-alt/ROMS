@@ -130,9 +130,10 @@
 
 !
 ! First compute total flux out through *all* open boundaries
-! (with radiation condition)
+! (i.e., not periodic)
+! closed means normal vel=0, so that hopefully shouldn't be a problem
 !
-      IF (VolCons(iwest,ng)) THEN
+       IF (.not.EWperiodic(ng)) THEN
         IF (DOMAIN(ng)%Western_Edge(tile)) THEN
           DO j=Jstr,Jend
             cff=0.5_r8*(zeta(Istr-1,j,kinp)+h(Istr-1,j)+                &
@@ -143,9 +144,7 @@
             my_flux=my_flux+cff*ubar(Istr,j,kinp)
           END DO
         END IF
-      END IF
 
-      IF (VolCons(ieast,ng)) THEN
         IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
           DO j=Jstr,Jend
             cff=0.5_r8*(zeta(Iend  ,j,kinp)+h(Iend  ,j)+                &
@@ -158,7 +157,7 @@
         END IF
       END IF
 
-      IF (VolCons(isouth,ng)) THEN
+      IF (.not.NSperiodic(ng)) THEN
         IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
           DO i=Istr,Iend
             cff=0.5_r8*(zeta(i,Jstr-1,kinp)+h(i,Jstr-1)+                &
@@ -169,9 +168,7 @@
             my_flux=my_flux+cff*vbar(i,JstrV-1,kinp)
           END DO
         END IF
-      END IF
 
-      IF (VolCons(inorth,ng)) THEN
         IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
           DO i=Istr,Iend
             cff=0.5_r8*(zeta(i,Jend  ,kinp)+h(i,Jend  )+                &
@@ -487,48 +484,52 @@
 !  mass conservation constraint.
 !-----------------------------------------------------------------------
 !
-      IF (VolCons(iwest,ng)) THEN
-        IF (DOMAIN(ng)%Western_Edge(tile)) THEN
-          DO j=Jstr,Jend
-            ubar(Istr,j,kinp)=(ubar(Istr,j,kinp)-ubar_xs)
+      IF (.not.EWperiodic(ng)) THEN
+         IF (VolCons(iwest,ng)) THEN
+            IF (DOMAIN(ng)%Western_Edge(tile)) THEN
+               DO j=Jstr,Jend
+                  ubar(Istr,j,kinp)=(ubar(Istr,j,kinp)-ubar_xs)
 #ifdef MASKING
-            ubar(Istr,j,kinp)=ubar(Istr,j,kinp)*umask(Istr,j)
+                  ubar(Istr,j,kinp)=ubar(Istr,j,kinp)*umask(Istr,j)
 #endif
-          END DO
-        END IF
+               END DO
+            END IF
+         END IF
+
+         IF (VolCons(ieast,ng)) THEN
+            IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
+               DO j=Jstr,Jend
+                  ubar(Iend+1,j,kinp)=(ubar(Iend+1,j,kinp)+ubar_xs)
+#ifdef MASKING
+                  ubar(Iend+1,j,kinp)=ubar(Iend+1,j,kinp)*umask(Iend+1,j)
+#endif
+               END DO
+            END IF
+         END IF
       END IF
 
-      IF (VolCons(ieast,ng)) THEN
-        IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
-          DO j=Jstr,Jend
-            ubar(Iend+1,j,kinp)=(ubar(Iend+1,j,kinp)+ubar_xs)
+      IF (.not.NSperiodic(ng)) THEN
+         IF (VolCons(isouth,ng)) THEN
+            IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
+               DO i=Istr,Iend
+                  vbar(i,Jstr,kinp)=(vbar(i,Jstr,kinp)-ubar_xs)
 #ifdef MASKING
-            ubar(Iend+1,j,kinp)=ubar(Iend+1,j,kinp)*umask(Iend+1,j)
+                  vbar(i,Jstr,kinp)=vbar(i,Jstr,kinp)*vmask(i,Jstr)
 #endif
-          END DO
-        END IF
-      END IF
-
-      IF (VolCons(isouth,ng)) THEN
-        IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
-          DO i=Istr,Iend
-            vbar(i,Jstr,kinp)=(vbar(i,Jstr,kinp)-ubar_xs)
+               END DO
+            END IF
+         END IF
+         
+         IF (VolCons(inorth,ng)) THEN
+            IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
+               DO i=Istr,Iend
+                  vbar(i,Jend+1,kinp)=(vbar(i,Jend+1,kinp)+ubar_xs)
 #ifdef MASKING
-            vbar(i,Jstr,kinp)=vbar(i,Jstr,kinp)*vmask(i,Jstr)
+                  vbar(i,Jend+1,kinp)=vbar(i,Jend+1,kinp)*vmask(i,Jend+1)
 #endif
-          END DO
-        END IF
-      END IF
-
-      IF (VolCons(inorth,ng)) THEN
-        IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
-          DO i=Istr,Iend
-            vbar(i,Jend+1,kinp)=(vbar(i,Jend+1,kinp)+ubar_xs)
-#ifdef MASKING
-            vbar(i,Jend+1,kinp)=vbar(i,Jend+1,kinp)*vmask(i,Jend+1)
-#endif
-          END DO
-        END IF
+               END DO
+            END IF
+         END IF
       END IF
 
       RETURN
