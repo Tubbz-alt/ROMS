@@ -1364,6 +1364,9 @@
 !  Write out viscosities if using sponge
 !
 #if defined SPONGE
+        IF (exit_flag.eq.NoError) THEN
+          IF (ncid.ne.STA(ng)%ncid) THEN
+            scale=1.0_r8
 #if defined UV_VIS2
             IF (find_string(var_name, n_var, 'visc2_r', varid)) THEN
               status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
