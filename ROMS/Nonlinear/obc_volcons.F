@@ -127,6 +127,11 @@
       my_area=0.0_r8
       my_flux=0.0_r8
 !
+
+!
+! First compute total flux out through *all* open boundaries
+! (with radiation condition)
+!
       IF (VolCons(iwest,ng)) THEN
         IF (DOMAIN(ng)%Western_Edge(tile)) THEN
           DO j=Jstr,Jend
@@ -135,7 +140,6 @@
 #ifdef MASKING
             cff=cff*umask(Istr,j)
 #endif
-            my_area=my_area+cff
             my_flux=my_flux+cff*ubar(Istr,j,kinp)
           END DO
         END IF
@@ -149,7 +153,6 @@
 #ifdef MASKING
             cff=cff*umask(Iend+1,j)
 #endif
-            my_area=my_area+cff
             my_flux=my_flux-cff*ubar(Iend+1,j,kinp)
           END DO
         END IF
@@ -163,7 +166,6 @@
 #ifdef MASKING
             cff=cff*vmask(i,Jstr)
 #endif
-            my_area=my_area+cff
             my_flux=my_flux+cff*vbar(i,JstrV-1,kinp)
           END DO
         END IF
@@ -177,11 +179,66 @@
 #ifdef MASKING
             cff=cff*vmask(i,Jend+1)
 #endif
-            my_area=my_area+cff
             my_flux=my_flux-cff*vbar(i,Jend+1,kinp)
           END DO
         END IF
       END IF
+!
+! Now calculate boundary cross-sectional area over which to distribute fluxes
+! i.e. area of boundaries where volcons is activated
+!
+      IF (VolCons(iwest,ng)) THEN
+        IF (DOMAIN(ng)%Western_Edge(tile)) THEN
+          DO j=Jstr,Jend
+            cff=0.5_r8*(zeta(Istr-1,j,kinp)+h(Istr-1,j)+                &
+     &                  zeta(Istr  ,j,kinp)+h(Istr  ,j))*on_u(Istr,j)
+#ifdef MASKING
+            cff=cff*umask(Istr,j)
+#endif
+            my_area=my_area+cff
+          END DO
+        END IF
+      END IF
+
+      IF (VolCons(ieast,ng)) THEN
+        IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
+          DO j=Jstr,Jend
+            cff=0.5_r8*(zeta(Iend  ,j,kinp)+h(Iend  ,j)+                &
+     &                  zeta(Iend+1,j,kinp)+h(Iend+1,j))*on_u(Iend+1,j)
+#ifdef MASKING
+            cff=cff*umask(Iend+1,j)
+#endif
+            my_area=my_area+cff
+          END DO
+        END IF
+      END IF
+
+      IF (VolCons(isouth,ng)) THEN
+        IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
+          DO i=Istr,Iend
+            cff=0.5_r8*(zeta(i,Jstr-1,kinp)+h(i,Jstr-1)+                &
+     &                  zeta(i,Jstr  ,kinp)+h(i,Jstr  ))*om_v(i,Jstr)
+#ifdef MASKING
+            cff=cff*vmask(i,Jstr)
+#endif
+            my_area=my_area+cff
+          END DO
+        END IF
+      END IF
+
+      IF (VolCons(inorth,ng)) THEN
+        IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
+          DO i=Istr,Iend
+            cff=0.5_r8*(zeta(i,Jend  ,kinp)+h(i,Jend  )+                &
+     &                  zeta(i,Jend+1,kinp)+h(i,Jend+1))*om_v(i,Jend+1)
+#ifdef MASKING
+            cff=cff*vmask(i,Jend+1)
+#endif
+            my_area=my_area+cff
+          END DO
+        END IF
+      END IF
+
 !
 !-----------------------------------------------------------------------
 !  Perform global summation and compute correction velocity.
