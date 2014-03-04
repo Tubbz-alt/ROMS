@@ -51,6 +51,9 @@
 #if defined SPONGE
       USE mod_mixing
 #endif
+#if defined CLIMATOLOGY
+      USE mod_clima
+#endif
 #if !defined PARALLEL_IO  && defined DISTRIBUTE
       USE distribute_mod, ONLY : mp_bcasti
 #endif
@@ -1360,10 +1363,87 @@
           END IF
         END IF
 #endif
+
+!*************************************************************************
+#if (defined M2CLM_NUDGING || defined M3CLM_NUDING || defined TCLM_NUDGING)
+!
+! Write out spatially varying nudging coefficients
+!
+        IF (exit_flag.eq.NoError) THEN
+          IF (ncid.ne.STA(ng)%ncid) THEN
+            scale=1.0_r8
+#if defined M2CLM_NUDGING
+            IF (find_string(var_name, n_var, 'M2nudgcof', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           CLIMA(ng) % M2nudgcof,                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'M2nudgcof', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'M2nudgcof', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#endif
+
+#if defined M3CLM_NUDGING
+            IF (find_string(var_name, n_var, 'M3nudgcof', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           CLIMA(ng) % M3nudgcof,                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'M3nudgcof', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'M3nudgcof', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#endif
+
+#if defined TCLM_NUDGING
+            IF (find_string(var_name, n_var, 'Tnudgcof', varid)) THEN
+              status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
+     &                           LBi, UBi, LBj, UBj, scale,             &
+#ifdef MASKING
+     &                           GRID(ng) % rmask_io,                   &
+#endif
+     &                           CLIMA(ng) % Tnudgcof,                          &
+     &                           SetFillVal = .FALSE.)
+              IF (status.ne.nf90_noerr) THEN
+                IF (Master) WRITE (stdout,10) 'Tnudgcof', TRIM(ncname)
+                exit_flag=3
+                ioerror=status
+              END IF
+            ELSE
+              IF (Master) WRITE (stdout,20) 'Tnudgcof', TRIM(ncname)
+              exit_flag=3
+              ioerror=nf90_enotvar
+            END IF
+#endif
+
+         END IF
+      END IF
+#endif
+
+!************************************************************************
+#if defined SPONGE
 !
 !  Write out viscosities if using sponge
 !
-#if defined SPONGE
         IF (exit_flag.eq.NoError) THEN
           IF (ncid.ne.STA(ng)%ncid) THEN
             scale=1.0_r8
