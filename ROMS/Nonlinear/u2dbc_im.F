@@ -283,18 +283,24 @@
 #else
               bry_val=BOUNDARY(ng)%ubar_west(j)
 #endif
+              ! mean 1/h
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Istr-1,j)+                 &
      &                            GRID(ng)%h(Istr  ,j)))
+              ! This is sqrt(g/h)
               cff1=SQRT(g*cff)
-              Cx=dt2d*cff1*0.5_r8*(GRID(ng)%pm(Istr-1,j)+               &
+              ! c~ in Mason, 2010
+              Cx=dt2d*SQRT(g*1/cff)*0.5_r8*(GRID(ng)%pm(Istr-1,j)+      &
      &                             GRID(ng)%pm(Istr  ,j))
+              ! This is zeta*
               Zx=(0.5_r8+Cx)*zeta(Istr  ,j,know)+                       &
      &           (0.5_r8-Cx)*zeta(Istr-1,j,know)
+              ! Not sure where Co is defined but it should be 1/(2+sqrt(2))
+              ! Co comes from mod_scalars
               IF (Cx.gt.Co) THEN
                 cff2=(1.0_r8-Co/Cx)**2
                 cff3=zeta(Istr,j,kout)+                                 &
      &               Cx*zeta(Istr-1,j,know)-                            &
-     &               (1.0_r8-Cx)*zeta(Istr,j,know)
+     &               (1.0_r8+Cx)*zeta(Istr,j,know)
                 Zx=Zx+cff2*cff3
               END IF
               ubar(Istr,j,kout)=0.5_r8*                                 &
@@ -563,7 +569,7 @@
               cff=1.0_r8/(0.5_r8*(GRID(ng)%h(Iend  ,j)+                 &
      &                            GRID(ng)%h(Iend+1,j)))
               cff1=SQRT(g*cff)
-              Cx=dt2d*cff1*0.5_r8*(GRID(ng)%pm(Iend  ,j)+               &
+              Cx=dt2d*SQRT(g*1/cff)*0.5_r8*(GRID(ng)%pm(Iend  ,j)+      &
      &                             GRID(ng)%pm(Iend+1,j))
               Zx=(0.5_r8+Cx)*zeta(Iend  ,j,know)+                       &
      &           (0.5_r8-Cx)*zeta(Iend+1,j,know)
@@ -571,7 +577,7 @@
                 cff2=(1.0_r8-Co/Cx)**2
                 cff3=zeta(Iend,j,kout)+                                 &
      &               Cx*zeta(Iend+1,j,know)-                            &
-     &               (1.0_r8-Cx)*zeta(Iend,j,know)
+     &               (1.0_r8+Cx)*zeta(Iend,j,know)
                 Zx=Zx+cff2*cff3
               END IF
               ubar(Iend+1,j,kout)=0.5_r8*                               &
