@@ -2721,6 +2721,73 @@
           IF (exit_flag.ne.NoError) RETURN
         END IF
 #endif
+
+#if (defined M2CLM_NUDGING || defined M3CLM_NUDING || defined TCLM_NUDGING)
+!
+! Output spatially varying nudging coefficients
+! 
+#if defined M2CLM_NUDGING
+        Vinfo( 1)='M2nudgcof'
+        Vinfo( 2)='2D momentum inverse nudging time scale'
+        Vinfo( 3)='second-1'
+        Vinfo(14)='nudg, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+
+#endif
+#if defined M3CLM_NUDGING
+        Vinfo( 1)='M3nudgcof'
+        Vinfo( 2)='3D momentum inverse nudging time scale'
+        Vinfo( 3)='second-1'
+        Vinfo(14)='nudg, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+
+#endif
+#if defined TCLM_NUDGING
+        Vinfo( 1)='Tnudgcof'
+        Vinfo( 2)='Tracers inverse nudging time scale'
+        Vinfo( 3)='second-1'
+        Vinfo(14)='nudg, scalar'
+        Vinfo(22)='coordinates'
+        Aval(5)=REAL(r2dvar,r8)
+
+        IF (ncid.eq.STA(ng)%ncid) THEN
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   1, (/stadim/), Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        ELSE
+          status=def_var(ng, model, ncid, varid, NF_TYPE,               &
+     &                   2, t2dgrd, Aval, Vinfo, ncname)
+          IF (exit_flag.ne.NoError) RETURN
+        END IF
+
+#endif
+
+#endif
+
+
+
 #if defined SPONGE
 !
 ! Output viscosities and diffusivities since SPONGE is used
