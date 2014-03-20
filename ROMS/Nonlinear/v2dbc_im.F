@@ -284,8 +284,10 @@
 #else
               bry_val=BOUNDARY(ng)%vbar_south(i)
 #endif
-              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)+                 &
-     &                            GRID(ng)%h(i,Jstr  )))
+              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jstr-1)+                &
+     &                             zeta(i,Jstr-1,know)+                 &
+     &                             GRID(ng)%h(i,Jstr  )+                &
+     &                             zeta(i,Jstr  ,know)))
               cff1=SQRT(g*cff)
               Ce=dt2d*SQRT(g*1/cff)*0.5_r8*(GRID(ng)%pn(i,Jstr-1)+      &
      &                             GRID(ng)%pn(i,Jstr  ))
@@ -561,8 +563,10 @@
 #else
               bry_val=BOUNDARY(ng)%vbar_north(i)
 #endif
-              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )+                 &
-     &                            GRID(ng)%h(i,Jend+1)))
+              cff=1.0_r8/(0.5_r8*(GRID(ng)%h(i,Jend  )+                &
+     &                             zeta(i,Jend  ,know)+                 &
+     &                             GRID(ng)%h(i,Jend+1)+                &
+     &                             zeta(i,Jend+1,know)))
               cff1=SQRT(g*cff)
               Ce=dt2d*SQRT(g*1/cff)*0.5_r8*(GRID(ng)%pn(i,Jend  )+      &
      &                             GRID(ng)%pn(i,Jend+1))
