@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       MODULE mod_netcdf
 !
-!svn $Id: mod_netcdf.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: mod_netcdf.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -1573,7 +1573,7 @@
 !     ng           Nested grid number (integer)                        !
 !     model        Calling model identifier (integer)                  !
 !     ncname       NetCDF file name (string)                           !
-!     varid        Variabke ID of the attribute's variable, or         !
+!     varid        Variable ID for variable attribute or               !
 !                    NF90_GLOBAL for a global attribute (integer)      !
 !     AttName      Attribute name to read (string array)               !
 !     ncid         NetCDF file ID (integer, OPTIONAL)                  !

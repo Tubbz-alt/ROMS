@@ -2,7 +2,7 @@
       MODULE ini_fields_mod
 #ifdef NONLINEAR
 !
-!svn $Id: ini_fields.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: ini_fields.F 719 2014-03-13 22:25:13Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -240,7 +240,7 @@
 !
 !  Local variable declarations.
 !
-      integer :: i, itrc, j, k
+      integer :: i, ic, itrc, j, k
 # if defined SEDIMENT || defined BBL_MODEL
       integer :: ised
 # endif
@@ -559,8 +559,12 @@
 !  If not perfect restart, initialize other time levels for tracers.
 !-----------------------------------------------------------------------
 !
+      ic=0
       IF (.not.PerfectRST(ng)) THEN
         DO itrc=1,NT(ng)
+          IF (LtracerCLM(itrc,ng).and.LnudgeTCLM(itrc,ng)) THEN
+            ic=ic+1
+          END IF
           DO k=1,N(ng)
             DO j=JstrB,JendB
               DO i=IstrB,IendB
@@ -576,12 +580,12 @@
 !
 !  Apply boundary conditions.
 !
-          CALL t3dbc_tile (ng, tile, itrc,                              &
+          CALL t3dbc_tile (ng, tile, itrc, ic,                          &
      &                     LBi, UBi, LBj, UBj, N(ng), NT(ng),           &
      &                     IminS, ImaxS, JminS, JmaxS,                  &
      &                     nstp, nstp,                                  &
      &                     t)
-          CALL t3dbc_tile (ng, tile, itrc,                              &
+          CALL t3dbc_tile (ng, tile, itrc, ic,                          &
      &                     LBi, UBi, LBj, UBj, N(ng), NT(ng),           &
      &                     IminS, ImaxS, JminS, JmaxS,                  &
      &                     nstp, nnew,                                  &

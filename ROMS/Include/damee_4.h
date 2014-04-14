@@ -1,5 +1,5 @@
 /*
-** svn $Id: damee_4.h 709 2014-01-23 20:09:38Z arango $
+** svn $Id: damee_4.h 719 2014-03-13 22:25:13Z arango $
 *******************************************************************************
 ** Copyright (c) 2002-2014 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -34,7 +34,5 @@
 # define LMD_SKPP
 # define LMD_NONLOCAL
 #endif
-#define TCLIMATOLOGY
-#define TCLM_NUDGING
 #define ANA_BSFLUX
 #define ANA_BTFLUX

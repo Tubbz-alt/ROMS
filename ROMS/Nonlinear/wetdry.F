@@ -2,7 +2,7 @@
       MODULE wetdry_mod
 #ifdef WET_DRY
 !
-!svn $Id: wetdry.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: wetdry.F 727 2014-03-28 21:46:14Z arango $
 !=======================================================================
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -313,7 +313,7 @@
 !  Insure that masks at mass point source locations are set to water
 !  to avoid writting output with FillValue at those locations.
 !
-        IF (LuvSrc(ng) THEN
+        IF (LuvSrc(ng)) THEN
           DO is=1,Nsrc(ng)
             i=SOURCES(ng)%Isrc(is)
             j=SOURCES(ng)%Jsrc(is)

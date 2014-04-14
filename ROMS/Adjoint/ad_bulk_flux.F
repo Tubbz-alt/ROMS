@@ -2,7 +2,7 @@
       MODULE ad_bulk_flux_mod
 #if defined ADJOINT && defined BULK_FLUXES_NOT_YET
 !
-!svn $Id: ad_bulk_flux.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: ad_bulk_flux.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -1063,7 +1063,7 @@
 !
         DO i=Istr-1,IendR
 !
-!  Compute transfer coefficients for momentun (Cd).
+!  Compute transfer coefficients for momentum (Cd).
 !
           Wspeed=SQRT(Wmag(i)*Wmag(i)+Wgus(i)*Wgus(i))
           Cd=Wstar(i)*Wstar(i)/(Wspeed*Wspeed+eps)
@@ -1219,7 +1219,7 @@
             ad_Hs=0.0_r8
 
 !
-!  Adjoint transfer coefficients for momentun (Cd).
+!  Adjoint transfer coefficients for momentum (Cd).
 !
 !>        tl_Cd=2.0_r8*(tl_Wstar(i)*Wstar(i)/(Wspeed*Wspeed+eps)        &
 !>   &          -tl_Wspeed*Wspeed*Cd/(Wspeed*Wspeed+eps))

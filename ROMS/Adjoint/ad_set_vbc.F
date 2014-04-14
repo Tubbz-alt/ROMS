@@ -2,7 +2,7 @@
       MODULE ad_set_vbc_mod
 #ifdef ADJOINT
 !
-!svn $Id: ad_set_vbc.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: ad_set_vbc.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -399,7 +399,7 @@
      &                     LBi, UBi, LBj, UBj,                          &
      &                     ad_bvstr)
 !
-!  Save adjoint bottom momentun flux for output purposes.
+!  Save adjoint bottom momentum flux for output purposes.
 !
       DO j=JstrR,JendR
         DO i=Istr,IendR
@@ -1272,7 +1272,7 @@
      &                     LBi, UBi, LBj, UBj,                          &
      &                     ad_bustr)
 !
-!  Save adjoint bottom momentun flux for output purposes.
+!  Save adjoint bottom momentum flux for output purposes.
 !
       DO j=JstrR,JendR
         DO i=Istr,IendR

@@ -6,7 +6,7 @@
     defined HESSIAN_SV || defined HESSIAN_SO || defined HESSIAN_FSV || \
     (defined ADJOINT   && defined TANGENT)
 !
-!svn $Id: ini_adjust.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: ini_adjust.F 719 2014-03-13 22:25:13Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -1767,7 +1767,7 @@
 !
 !  Local variable declarations.
 !
-      integer :: i, j
+      integer :: i, ic, j
 #  ifdef SOLVE3D
       integer :: itrc, k
 #  endif
@@ -2020,8 +2020,13 @@
      &                 LBi, UBi, LBj, UBj, N(ng),                       &
      &                 IminS, ImaxS, JminS, JmaxS,                      &
      &                 Lout, Lout, v)
+!
+      ic=0
       DO itrc=1,NT(ng)
-        CALL t3dbc_tile (ng, tile, itrc,                                &
+        IF (LtracerCLM(itrc,ng).and.LnudgeTCLM(itrc,ng)) THEN
+          ic=ic+1
+        END IF
+        CALL t3dbc_tile (ng, tile, itrc, ic,                            &
      &                   LBi, UBi, LBj, UBj, N(ng), NT(ng),             &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   Lout, Lout, t)
@@ -2594,7 +2599,7 @@
 !
 !  Local variable declarations.
 !
-      integer :: i, j
+      integer :: i, ic, j
 #  ifdef SOLVE3D
       integer :: itrc, k
 #  endif
@@ -2848,8 +2853,13 @@
      &                    LBi, UBi, LBj, UBj, N(ng),                    &
      &                    IminS, ImaxS, JminS, JmaxS,                   &
      &                    Lout, Lout, tl_v)
+!
+      ic=0
       DO itrc=1,NT(ng)
-        CALL tl_t3dbc_tile (ng, tile, itrc,                             &
+        IF (LtracerCLM(itrc,ng).and.LnudgeTCLM(itrc,ng)) THEN
+          ic=ic+1
+        END IF
+        CALL tl_t3dbc_tile (ng, tile, itrc, ic,                         &
      &                      LBi, UBi, LBj, UBj, N(ng), NT(ng),          &
      &                      IminS, ImaxS, JminS, JmaxS,                 &
      &                      Lout, Lout, tl_t)

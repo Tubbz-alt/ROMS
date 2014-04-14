@@ -3,7 +3,7 @@
 
 #if defined TANGENT && defined BALANCE_OPERATOR
 !
-!svn $Id: tl_balance.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: tl_balance.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -528,7 +528,7 @@
 # endif
           END DO
 !
-!  Compute balance, interior U-momemtum from baroclinic pressure
+!  Compute balance, interior U-momentum from baroclinic pressure
 !  gradient (differentiate and then vertically integrate).
 !
           DO k=N(ng)-1,1,-1
@@ -619,7 +619,7 @@
 # endif
           END DO
 !
-!  Compute balance, interior V-momemtum from baroclinic pressure
+!  Compute balance, interior V-momentum from baroclinic pressure
 !  gradient (differentiate and then vertically integrate).
 !
           DO k=N(ng)-1,1,-1

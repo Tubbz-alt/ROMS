@@ -1,5 +1,5 @@
 /*
-** svn $Id: ias.h 709 2014-01-23 20:09:38Z arango $
+** svn $Id: ias.h 719 2014-03-13 22:25:13Z arango $
 *******************************************************************************
 ** Copyright (c) 2002-2014 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -78,10 +78,6 @@
 # define ANA_SPFLUX
 # define ANA_BPFLUX
 #endif
-#undef  M2CLIMATOLOGY
-#undef  M3CLIMATOLOGY
-#undef  TCLIMATOLOGY
-#undef  ZCLIMATOLOGY
 
 #define BULK_FLUXES
 #ifdef BULK_FLUXES

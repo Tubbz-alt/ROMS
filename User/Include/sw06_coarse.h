@@ -1,5 +1,5 @@
 /*
-** svn $Id: sw06_coarse.h 709 2014-01-23 20:09:38Z arango $
+** svn $Id: sw06_coarse.h 719 2014-03-13 22:25:13Z arango $
 *******************************************************************************
 ** Copyright (c) 2002-2014 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -49,7 +49,6 @@
 # define SALINITY
 # define NONLIN_EOS
 # define CURVGRID
-# define SPONGE
 # undef  AVERAGES
 # define MASKING
 # define SPLINES
@@ -80,10 +79,6 @@
 #  define ADD_M2OBC
 # endif
 
-# undef  TCLIMATOLOGY
-# undef  TCLM_NUDGING
-# undef  M3CLM_NUDGING
-
 # define ANA_BSFLUX
 # define ANA_BTFLUX
 # define ANA_SSFLUX
@@ -111,7 +106,6 @@
 # define SALINITY
 # define NONLIN_EOS
 # define CURVGRID
-# define SPONGE
 # undef  AVERAGES
 # define MASKING
 # define SPLINES
@@ -133,10 +127,6 @@
 # if defined UV_TIDES || defined SSH_TIDES
 #  define ADD_M2OBC
 # endif
-
-# undef  TCLIMATOLOGY
-# undef  TCLM_NUDGING
-# undef  M3CLM_NUDGING
 
 # define ANA_BSFLUX
 # define ANA_BTFLUX

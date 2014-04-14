@@ -2,7 +2,7 @@
 #if defined AVERAGES_DETIDE && (defined SSH_TIDES || defined UV_TIDES)
       SUBROUTINE def_tides (ng, ldef)
 !
-!svn $Id: def_tides.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: def_tides.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -236,7 +236,7 @@
         t3dgrd(4)=DimIDs(12)
 # endif
 !
-!  Define dimension vectors for staggered u-momemtum type variables.
+!  Define dimension vectors for staggered u-momentum type variables.
 !
         u2dgrd(1)=DimIDs( 2)
         u2dgrd(2)=DimIDs( 6)
@@ -248,7 +248,7 @@
         u3dgrd(4)=DimIDs(12)
 # endif
 !
-!  Define dimension vectors for staggered v-momemtum type variables.
+!  Define dimension vectors for staggered v-momentum type variables.
 !
         v2dgrd(1)=DimIDs( 3)
         v2dgrd(2)=DimIDs( 7)

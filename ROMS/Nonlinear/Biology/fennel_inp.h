@@ -1,6 +1,6 @@
       SUBROUTINE read_BioPar (model, inp, out, Lwrite)
 !
-!svn $Id: fennel_inp.h 709 2014-01-23 20:09:38Z arango $
+!svn $Id: fennel_inp.h 723 2014-03-14 20:20:58Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -167,6 +167,14 @@
                   ad_tnu4(i,ng)=Rbio(itrc,ng)
                 END DO
               END DO
+            CASE ('LtracerSponge')
+              Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
+              DO ng=1,Ngrids
+                DO itrc=1,NBT
+                  i=idbio(itrc)
+                  LtracerSponge(i,ng)=Ltrc(itrc,ng)
+                END DO
+              END DO
             CASE ('AKT_BAK')
               Npts=load_r(Nval, Rval, NBT*Ngrids, Rbio)
               DO ng=1,Ngrids
@@ -200,7 +208,7 @@
               END IF
               ifield=isTvar(idbio(itracer))
               Npts=load_lbc(Nval, Cval, line, nline, ifield, igrid,     &
-     &                      iTrcStr, iTrcEnd,                           &
+     &                      idbio(iTrcStr), idbio(iTrcEnd),             &
      &                      Vname(1,idTvar(idbio(itracer))), LBC)
 #if defined ADJOINT || defined TANGENT || defined TL_IOMS
             CASE ('ad_LBC(isTvar)')
@@ -211,10 +219,17 @@
               END IF
               ifield=isTvar(idbio(itracer))
               Npts=load_lbc(Nval, Cval, line, nline, ifield, igrid,     &
-     &                      iTrcStr, iTrcEnd,                           &
+     &                      idbio(iTrcStr), idbio(iTrcEnd),             &
      &                      Vname(1,idTvar(idbio(itracer))), ad_LBC)
 #endif
-#ifdef TCLIMATOLOGY
+            CASE ('LtracerSrc')
+              Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
+              DO ng=1,Ngrids
+                DO itrc=1,NBT
+                  i=idbio(itrc)
+                  LtracerSrc(i,ng)=Ltrc(itrc,ng)
+                END DO
+              END DO
             CASE ('LtracerCLM')
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids
@@ -223,13 +238,12 @@
                   LtracerCLM(i,ng)=Ltrc(itrc,ng)
                 END DO
               END DO
-#endif
-            CASE ('LtracerSrc')
+            CASE ('LnudgeTCLM')
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids
                 DO itrc=1,NBT
                   i=idbio(itrc)
-                  LtracerSrc(i,ng)=Ltrc(itrc,ng)
+                  LnudgeTCLM(i,ng)=Ltrc(itrc,ng)
                 END DO
               END DO
             CASE ('Hout(idTvar)')
@@ -604,6 +618,18 @@
 #endif
             DO itrc=1,NBT
               i=idbio(itrc)
+              IF (LtracerSponge(i,ng)) THEN
+                WRITE (out,110) LtracerSponge(i,ng), 'LtracerSponge',   &
+     &              i, 'Turning ON  sponge on tracer ', i,              &
+     &              TRIM(Vname(1,idTvar(i)))
+              ELSE
+                WRITE (out,110) LtracerSponge(i,ng), 'LtracerSponge',   &
+     &              i, 'Turning OFF sponge on tracer ', i,              &
+     &              TRIM(Vname(1,idTvar(i)))
+              END IF
+            END DO
+            DO itrc=1,NBT
+              i=idbio(itrc)
               WRITE(out,100) Akt_bak(i,ng), 'Akt_bak', i,               &
      &             'Background vertical mixing coefficient (m2/s)',     &
      &             'for tracer ', i, TRIM(Vname(1,idTvar(i)))
@@ -641,14 +667,30 @@
      &              TRIM(Vname(1,idTvar(i)))
               END IF
             END DO
-#ifdef TCLIMATOLOGY
             DO itrc=1,NBT
               i=idbio(itrc)
-              WRITE (out,110) LtracerCLM(i,ng), 'LtracerCLM',           &
-     &              i, 'Processing climatology on tracer ', i,          &
+              IF (LtracerCLM(i,ng)) THEN
+                WRITE (out,110) LtracerCLM(i,ng), 'LtracerCLM', i,      &
+     &              'Turning ON  processing of climatology tracer ', i, &
      &              TRIM(Vname(1,idTvar(i)))
+              ELSE
+                WRITE (out,110) LtracerCLM(i,ng), 'LtracerCLM', i,      &
+     &              'Turning OFF processing of climatology tracer ', i, &
+     &              TRIM(Vname(1,idTvar(i)))
+              END IF
             END DO
-#endif
+            DO itrc=1,NBT
+              i=idbio(itrc)
+              IF (LnudgeTCLM(i,ng)) THEN
+                WRITE (out,110) LnudgeTCLM(i,ng), 'LnudgeTCLM', i,      &
+     &              'Turning ON  nudging of climatology tracer ', i,    &
+     &              TRIM(Vname(1,idTvar(i)))
+              ELSE
+                WRITE (out,110) LnudgeTCLM(i,ng), 'LnudgeTCLM', i,      &
+     &              'Turning OFF nudging of climatology tracer ', i,    &
+     &              TRIM(Vname(1,idTvar(i)))
+              END IF
+            END DO
             DO itrc=1,NBT
               i=idbio(itrc)
               IF (Hout(idTvar(i),ng)) WRITE (out,120)                   &
@@ -840,13 +882,13 @@
   50  FORMAT (/,' read_BioPar - Error while processing line: ',/,a)
   60  FORMAT (/,/,' Fennel Model Parameters, Grid: ',i2.2,              &
      &        /,  ' =================================',/)
-  70  FORMAT (1x,i10,2x,a,t30,a)
-  80  FORMAT (1p,e11.4,2x,a,t30,a)
-  90  FORMAT (1p,e11.4,2x,a,t30,a,/,t32,a)
- 100  FORMAT (1p,e11.4,2x,a,'(',i2.2,')',t30,a,/,t32,a,i2.2,':',1x,a)
- 110  FORMAT (10x,l1,2x,a,'(',i2.2,')',t30,a,i2.2,':',1x,a)
- 120  FORMAT (10x,l1,2x,a,t30,a,i2.2,':',1x,a)
- 130  FORMAT (10x,l1,2x,a,t30,a,1x,a)
+  70  FORMAT (1x,i10,2x,a,t32,a)
+  80  FORMAT (1p,e11.4,2x,a,t32,a)
+  90  FORMAT (1p,e11.4,2x,a,t32,a,/,t34,a)
+ 100  FORMAT (1p,e11.4,2x,a,'(',i2.2,')',t32,a,/,t34,a,i2.2,':',1x,a)
+ 110  FORMAT (10x,l1,2x,a,'(',i2.2,')',t32,a,i2.2,':',1x,a)
+ 120  FORMAT (10x,l1,2x,a,t32,a,i2.2,':',1x,a)
+ 130  FORMAT (10x,l1,2x,a,t32,a,1x,a)
 
       RETURN
       END SUBROUTINE read_BioPar

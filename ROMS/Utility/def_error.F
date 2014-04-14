@@ -3,7 +3,7 @@
    (defined POSTERIOR_ERROR_F || defined POSTERIOR_ERROR_I)
       SUBROUTINE def_error (ng)
 !
-!svn $Id: def_error.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: def_error.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -324,7 +324,7 @@
 #  endif
 # endif
 !
-!  Define dimension vectors for staggered u-momemtum type variables.
+!  Define dimension vectors for staggered u-momentum type variables.
 !
 # if defined WRITE_WATER && defined MASKING
         u2dgrd(1)=DimIDs(18)
@@ -351,7 +351,7 @@
 #  endif
 # endif
 !
-!  Define dimension vectors for staggered v-momemtum type variables.
+!  Define dimension vectors for staggered v-momentum type variables.
 !
 # if defined WRITE_WATER && defined MASKING
         v2dgrd(1)=DimIDs(19)
@@ -379,7 +379,7 @@
 # endif
 # ifdef SOLVE3D
 !
-!  Define dimension vector for staggered w-momemtum type variables.
+!  Define dimension vector for staggered w-momentum type variables.
 !
 #  if defined WRITE_WATER && defined MASKING
         w3dgrd(1)=DimIDs(23)

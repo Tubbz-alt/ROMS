@@ -1,13 +1,13 @@
 #!/bin/csh -f
 #
-# svn $Id: job_normalization.sh 709 2014-01-23 20:09:38Z arango $
+# svn $Id: job_normalization.sh 719 2014-03-13 22:25:13Z arango $
 #######################################################################
 # Copyright (c) 2002-2014 The ROMS/TOMS Group                         #
 #   Licensed under a MIT/X style license                              #
 #   See License_ROMS.txt                                              #
 #######################################################################
 #                                                                     #
-# 4D-Var error covariance normalization coeficients job script:       #
+# 4D-Var error covariance normalization coefficients job script:      #
 #                                                                     #
 # This script NEEDS to be run before any run:                         #
 #                                                                     #

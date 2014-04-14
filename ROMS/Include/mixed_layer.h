@@ -1,5 +1,5 @@
 /*
-** svn $Id: mixed_layer.h 709 2014-01-23 20:09:38Z arango $
+** svn $Id: mixed_layer.h 719 2014-03-13 22:25:13Z arango $
 *******************************************************************************
 ** Copyright (c) 2002-2014 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
@@ -26,8 +26,6 @@
 #define ANA_SSFLUX
 #define ANA_BSFLUX
 #define TS_U3HADVECTION
-#define NORTHERN_WALL
-#define SOUTHERN_WALL
 
 #undef  MY25_MIXING
 #define GLS_MIXING

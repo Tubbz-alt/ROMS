@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE close_inp (ng, model)
 !
-!svn $Id: close_io.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: close_io.F 719 2014-03-13 22:25:13Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -96,32 +96,31 @@
           IF (exit_flag.ne.NoError) RETURN
         END IF
       END IF
-
-#ifdef CLM_FILE
 !
 !  If appropriate, close boundary files.
 !
-      IF ((CLM(ng)%Nfiles.gt.1).and.(CLM(ng)%ncid.ge.0)) THEN
-        IF (model.eq.iADM) THEN
-          DO i=1,CLM(ng)%Nfiles
-            IF ((CLM(ng)%time_min(i).le.tdays(ng)).and.                 &
-     &          (tdays(ng).le.CLM(ng)%time_max(i))) THEN
-              Fcount=i
-              EXIT
-            END IF
-          END DO
-        ELSE
-          Fcount=1
+      IF (CLM_FILE(ng)) THEN
+        IF ((CLM(ng)%Nfiles.gt.1).and.(CLM(ng)%ncid.ge.0)) THEN
+          IF (model.eq.iADM) THEN
+            DO i=1,CLM(ng)%Nfiles
+              IF ((CLM(ng)%time_min(i).le.tdays(ng)).and.               &
+     &            (tdays(ng).le.CLM(ng)%time_max(i))) THEN
+                Fcount=i
+                EXIT
+              END IF
+            END DO
+          ELSE
+            Fcount=1
+          END IF
+          CLM(ng)%Fcount=Fcount
+          CLM(ng)%name=TRIM(CLM(ng)%files(Fcount))
+          lstr=LEN_TRIM(CLM(ng)%name)
+          CLM(ng)%base=CLM(ng)%name(1:lstr-3)
+          CALL netcdf_close (ng, model, CLM(ng)%ncid,                   &
+     &                       CLM(ng)%files(i),  .FALSE.)
+          IF (exit_flag.ne.NoError) RETURN
         END IF
-        CLM(ng)%Fcount=Fcount
-        CLM(ng)%name=TRIM(CLM(ng)%files(Fcount))
-        lstr=LEN_TRIM(CLM(ng)%name)
-        CLM(ng)%base=CLM(ng)%name(1:lstr-3)
-        CALL netcdf_close (ng, model, CLM(ng)%ncid,                     &
-     &                     CLM(ng)%files(i),  .FALSE.)
-        IF (exit_flag.ne.NoError) RETURN
       END IF
-#endif
 
       RETURN
       END SUBROUTINE close_inp

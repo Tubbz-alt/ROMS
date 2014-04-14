@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE def_rst (ng)
 !
-!svn $Id: def_rst.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: def_rst.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -306,7 +306,7 @@
 # endif
 #endif
 !
-!  Define dimension vectors for staggered u-momemtum type variables.
+!  Define dimension vectors for staggered u-momentum type variables.
 !
 #if !defined PERFECT_RESTART && \
     (defined WRITE_WATER && defined MASKING)
@@ -338,7 +338,7 @@
 # endif
 #endif
 !
-!  Define dimension vectors for staggered v-momemtum type variables.
+!  Define dimension vectors for staggered v-momentum type variables.
 !
 #if !defined PERFECT_RESTART && \
     (defined WRITE_WATER && defined MASKING)
@@ -384,7 +384,7 @@
         r2dgrd(4)=DimIDs(12)
 # endif
 !
-!  Define dimension vectors for RHS u-momemtum equation.
+!  Define dimension vectors for RHS u-momentum equation.
 !
 # if !defined PERFECT_RESTART && \
      (defined WRITE_WATER && defined MASKING)
@@ -408,7 +408,7 @@
 #  endif
 # endif
 !
-!  Define dimension vectors for RHS v-momemtum equation.
+!  Define dimension vectors for RHS v-momentum equation.
 !
 # if !defined PERFECT_RESTART && \
      (defined WRITE_WATER && defined MASKING)
@@ -434,7 +434,7 @@
 #endif
 #ifdef SOLVE3D
 !
-!  Define dimension vector for staggered w-momemtum type variables.
+!  Define dimension vector for staggered w-momentum type variables.
 !
 # if !defined PERFECT_RESTART && \
      (defined WRITE_WATER && defined MASKING)

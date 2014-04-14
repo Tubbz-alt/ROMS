@@ -5,7 +5,7 @@
    (defined TL_AVERAGES && defined TANGENT)
       SUBROUTINE wrt_avg (ng)
 !
-!svn $Id: wrt_avg.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: wrt_avg.F 727 2014-03-28 21:46:14Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -1757,7 +1757,7 @@
 #  endif
 # endif
 !
-!  Write out surface u-momentun stress.
+!  Write out surface u-momentum stress.
 !
       IF (Aout(idUsms,ng)) THEN
 # ifdef ADJOINT
@@ -1788,7 +1788,7 @@
         END IF
       END IF
 !
-!  Write out surface v-momentun stress.
+!  Write out surface v-momentum stress.
 !
       IF (Aout(idVsms,ng)) THEN
 # ifdef ADJOINT
@@ -1819,7 +1819,7 @@
         END IF
       END IF
 !
-!  Write out bottom u-momentun stress.
+!  Write out bottom u-momentum stress.
 !
       IF (Aout(idUbms,ng)) THEN
 # ifdef ADJOINT
@@ -1850,7 +1850,7 @@
         END IF
       END IF
 !
-!  Write out bottom v-momentun stress.
+!  Write out bottom v-momentum stress.
 !
       IF (Aout(idVbms,ng)) THEN
 # ifdef ADJOINT
