@@ -1,7 +1,7 @@
 #include "cppdefs.h"
       SUBROUTINE wrt_info (ng, model, ncid, ncname)
 !
-!svn $Id: wrt_info.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: wrt_info.F 719 2014-03-13 22:25:13Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -48,9 +48,7 @@
       USE mod_storage
 #endif
       USE mod_sources
-#if defined SPONGE
       USE mod_mixing
-#endif
 #if defined CLIMATOLOGY
       USE mod_clima
 #endif
@@ -434,6 +432,20 @@
 # endif
 #endif
 
+#if defined UV_VIS2 || defined UV_VIS4
+      CALL netcdf_put_lvar (ng, model, ncname, 'LuvSponge',             &
+     &                      LuvSponge(ng), (/0/), (/0/),                &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+#endif
+
+#if (defined TS_DIF2 || defined TS_DIF4) && defined SOLVE3D
+      CALL netcdf_put_lvar (ng, model, ncname, 'LtracerSponge',         &
+     &                      LtracerSponge(:,ng), (/1/), (/NT(ng)/),     &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+#endif
+
 #ifdef SOLVE3D
 !
 !  Background vertical mixing coefficients.
@@ -764,6 +776,49 @@
 !
       CALL netcdf_put_lvar (ng, model, ncname, 'LtracerSrc',            &
      &                      LtracerSrc(:,ng), (/1/), (/NT(ng)/),        &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+#endif
+!
+!  Logical switches to process climatology fields.
+!
+      CALL netcdf_put_lvar (ng, model, ncname, 'LsshCLM',               &
+     &                      LsshCLM(ng), (/0/), (/0/),                  &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+
+      CALL netcdf_put_lvar (ng, model, ncname, 'Lm2CLM',                &
+     &                      Lm2CLM(ng), (/0/), (/0/),                   &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+
+#ifdef SOLVE3D
+      CALL netcdf_put_lvar (ng, model, ncname, 'Lm3CLM',                &
+     &                      Lm3CLM(ng), (/0/), (/0/),                   &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+
+      CALL netcdf_put_lvar (ng, model, ncname, 'LtracerCLM',            &
+     &                      LtracerCLM(:,ng), (/1/), (/NT(ng)/),        &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+#endif
+!
+!  Logical switches for nudging climatology fields.
+!
+      CALL netcdf_put_lvar (ng, model, ncname, 'LnudgeM2CLM',           &
+     &                      LnudgeM2CLM(ng), (/0/), (/0/),              &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+
+#ifdef SOLVE3D
+      CALL netcdf_put_lvar (ng, model, ncname, 'LnudgeM3CLM',           &
+     &                      LnudgeM3CLM(ng), (/0/), (/0/),              &
+     &                      ncid = ncid)
+      IF (exit_flag.ne.NoError) RETURN
+
+      CALL netcdf_put_lvar (ng, model, ncname, 'LnudgeTCLM',            &
+     &                      LnudgeTCLM(:,ng), (/1/), (/NT(ng)/),        &
      &                      ncid = ncid)
       IF (exit_flag.ne.NoError) RETURN
 #endif
@@ -1440,7 +1495,7 @@
 #endif
 
 !************************************************************************
-#if defined SPONGE
+
 !
 !  Write out viscosities if using sponge
 !
@@ -1486,7 +1541,7 @@
               exit_flag=3
               ioerror=nf90_enotvar
             END IF
-#endif
+#endif 
 #if defined TS_DIF2
             IF (find_string(var_name, n_var, 'diff2_t', varid)) THEN
               status=nf_fwrite2d(ng, model, ncid, varid, 0, r2dvar,     &
@@ -1570,7 +1625,7 @@
 #endif
           END IF
         END IF
-#endif
+
 !
 !  Coriolis parameter.
 !
