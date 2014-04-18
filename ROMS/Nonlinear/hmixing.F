@@ -239,7 +239,7 @@
 !
       integer :: i, j, k
 
-      real(r8), parameter :: SmagorCoef = 0.1_r8
+      real(r8), parameter :: SmagorCoef = 1.0_r8
       real(r8), parameter :: PecletCoef = 1.0_r8 / 12.0_r8
 
       real(r8) :: DefRate, cff, clip_diff, clip_scale
@@ -305,13 +305,17 @@
 !
 !  Smagorinsky viscosity.
 !
-#   if defined UV_VIS2
+! Prefer smagorinsky biharmonic if both harmonic and biharmonic are enabled
+! The idea is that I want to use harmonic viscosity only in the sponge.
+#   if defined UV_VIS2 && !defined UV_VIS4
             visc3d_r(i,j,k)=Hviscosity(i,j)+                            &
      &                      SmagorCoef*omn(i,j)*DefRate
-#   elif defined UV_VIS4
+#endif
+
+# if defined UV_VIS4
             visc3d_r(i,j,k)=Hviscosity(i,j)+                            &
      &                      PecletCoef*(omn(i,j)**2)*DefRate
-#    ifdef MIX_GEO_UV
+#    ifdef MIX_GEO_UV4
             visc3d_r(i,j,k)=MIN(clip_scale, visc3d_r(i,j,k))
 #    endif
             visc3d_r(i,j,k)=SQRT(visc3d_r(i,j,k))

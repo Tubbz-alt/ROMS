@@ -1048,37 +1048,67 @@
       Coptions(is:is+8)=' MINRES,'
 #endif
 #if (defined TS_DIF2 || defined TS_DIF4) && defined SOLVE3D
-# ifdef MIX_GEO_TS
+# ifdef MIX_GEO_TS2
       IF (Master) WRITE (stdout,20) 'MIX_GEO_TS',                       &
-     &   'Mixing of tracers along geopotential surfaces.'
+     &   'Harmonic mixing of tracers along geopotential surfaces.'
       is=LEN_TRIM(Coptions)+1
-      Coptions(is:is+12)=' MIX_GEO_TS,'
+      Coptions(is:is+12)=' MIX_GEO_TS2,'
 # endif
-# ifdef MIX_ISO_TS
+# ifdef MIX_ISO_TS2
       IF (Master) WRITE (stdout,20) 'MIX_ISO_TS',                       &
-     &   'Mixing of tracers along isopycnal surfaces.'
+     &   'Harmonic mixing of tracers along isopycnal surfaces.'
       is=LEN_TRIM(Coptions)+1
-      Coptions(is:is+12)=' MIX_ISO_TS,'
+      Coptions(is:is+12)=' MIX_ISO_TS2,'
 # endif
-# ifdef MIX_S_TS
+# ifdef MIX_S_TS2
       IF (Master) WRITE (stdout,20) 'MIX_S_TS',                         &
-     &   'Mixing of tracers along constant S-surfaces.'
+     &   'Harmonic mixing of tracers along constant S-surfaces.'
       is=LEN_TRIM(Coptions)+1
-      Coptions(is:is+10)=' MIX_S_TS,'
+      Coptions(is:is+10)=' MIX_S_TS2,'
+# endif
+# ifdef MIX_GEO_TS4
+      IF (Master) WRITE (stdout,20) 'MIX_GEO_TS',                       &
+     &   'Biharmonic mixing of tracers along geopotential surfaces.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+12)=' MIX_GEO_TS4,'
+# endif
+# ifdef MIX_ISO_TS4
+      IF (Master) WRITE (stdout,20) 'MIX_ISO_TS',                       &
+     &   'Biharmonic mixing of tracers along isopycnal surfaces.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+12)=' MIX_ISO_TS4,'
+# endif
+# ifdef MIX_S_TS4
+      IF (Master) WRITE (stdout,20) 'MIX_S_TS',                         &
+     &   'Biharmonic mixing of tracers along constant S-surfaces.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+10)=' MIX_S_TS4,'
 # endif
 #endif
 #if (defined UV_VIS2 || defined UV_VIS4) && defined SOLVE3D
-# ifdef MIX_GEO_UV
+# ifdef MIX_GEO_UV2
       IF (Master) WRITE (stdout,20) 'MIX_GEO_UV',                       &
-     &   'Mixing of momentum along geopotential surfaces.'
+     &   'Harmonic mixing of momentum along geopotential surfaces.'
       is=LEN_TRIM(Coptions)+1
-      Coptions(is:is+11)=' MIX_GEO_UV,'
+      Coptions(is:is+11)=' MIX_GEO_UV2,'
 # endif
-# ifdef MIX_S_UV
+# ifdef MIX_S_UV2
       IF (Master) WRITE (stdout,20) 'MIX_S_UV',                         &
-     &   'Mixing of momentum along constant S-surfaces.'
+     &   'Harmonic mixing of momentum along constant S-surfaces.'
       is=LEN_TRIM(Coptions)+1
-      Coptions(is:is+10)=' MIX_S_UV,'
+      Coptions(is:is+10)=' MIX_S_UV2,'
+# endif
+# ifdef MIX_GEO_UV4
+      IF (Master) WRITE (stdout,20) 'MIX_GEO_UV',                       &
+     &   'Biharmonic mixing of momentum along geopotential surfaces.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+11)=' MIX_GEO_UV4,'
+# endif
+# ifdef MIX_S_UV4
+      IF (Master) WRITE (stdout,20) 'MIX_S_UV',                         &
+     &   'Biharmonic mixing of momentum along constant S-surfaces.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+10)=' MIX_S_UV4,'
 # endif
 #endif
 #ifdef MPI

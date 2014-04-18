@@ -30,9 +30,9 @@
       CONTAINS
 
 # ifdef UV_VIS2
-#  if defined MIX_S_UV
+#  if defined MIX_S_UV2
 #   include "uv3dmix2_s.h"
-#  elif defined MIX_GEO_UV
+#  elif defined MIX_GEO_UV2
 #   include "uv3dmix2_geo.h"
 #  else
       UV3DMIX: must define one of MIX_S_UV, MIX_GEO_UV
@@ -40,9 +40,9 @@
 # endif
 
 # ifdef UV_VIS4
-#  if defined MIX_S_UV
+#  if defined MIX_S_UV4
 #   include "uv3dmix4_s.h"
-#  elif defined MIX_GEO_UV
+#  elif defined MIX_GEO_UV4
 #   include "uv3dmix4_geo.h"
 #  else
       UV3DMIX: must define one of MIX_S_UV, MIX_GEO_UV

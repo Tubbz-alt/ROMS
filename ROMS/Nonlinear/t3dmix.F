@@ -30,11 +30,11 @@
       CONTAINS
 
 # ifdef TS_DIF2
-#  if defined MIX_S_TS
+#  if defined MIX_S_TS2
 #   include "t3dmix2_s.h"
-#  elif defined MIX_GEO_TS
+#  elif defined MIX_GEO_TS2
 #   include "t3dmix2_geo.h"
-#  elif defined MIX_ISO_TS
+#  elif defined MIX_ISO_TS2
 #   include "t3dmix2_iso.h"
 #  else
       T3DMIX: must define one of MIX_S_TS, MIX_GEO_TS, MIX_ISO_TS
@@ -42,11 +42,11 @@
 # endif
 
 # ifdef TS_DIF4
-#  if defined MIX_S_TS
+#  if defined MIX_S_TS4
 #   include "t3dmix4_s.h"
-#  elif defined MIX_GEO_TS
+#  elif defined MIX_GEO_TS4
 #   include "t3dmix4_geo.h"
-#  elif defined MIX_ISO_TS
+#  elif defined MIX_ISO_TS4
 #   include "t3dmix4_iso.h"
 #  else
       T3DMIX: must define one of MIX_S_TS, MIX_GEO_TS, MIX_ISO_TS
