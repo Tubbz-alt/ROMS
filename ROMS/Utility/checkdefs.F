@@ -2128,6 +2128,12 @@
       Coptions(is:is+16)=' !VWALK_FORWARD,'
 # endif
 #endif
+#if defined FLOATS && defined DC_FLOATS_DEPLOYMENT
+      IF (Master) WRITE (stdout,20) 'DC_FLOATS_DEPLOYMENT',                    &
+     &     'My, more reasonable, floats deployment.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+22)=' DC_FLOATS_DEPLOYMENT,'
+#endif
 #if defined VISC_3DCOEF
       IF (Master) WRITE (stdout,20) 'VISC_3DCOEF',                      &
      &   'Horizontal, time-dependent 3D viscosity coefficient.'
