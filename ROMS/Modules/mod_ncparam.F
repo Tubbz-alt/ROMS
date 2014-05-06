@@ -496,7 +496,8 @@
         character (len=40 ) :: svn_rev
         character (len=256) :: svn_url
 
-        character (len=256) :: git_com
+        character (len=42) :: git_roms
+        character (len=42) :: git_proj
 !
       CONTAINS
 !
@@ -858,8 +859,11 @@
 #ifdef SVN_REV
           svn_rev=SVN_REV
 #endif
-#ifdef GIT_COM
-          git_com=GIT_COM
+#ifdef GIT_ROMS
+          git_roms=GIT_ROMS
+#endif
+#ifdef GIT_PROJ
+          git_proj=GIT_PROJ
 #endif
 !
 !  Read in other variable information.

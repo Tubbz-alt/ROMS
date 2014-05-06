@@ -326,8 +326,8 @@ OS := $(patsubst sn%,UNICOS-sn,$(OS))
 CPU := $(shell uname -m | sed 's/[\/ ]/-/g')
 
 SVNREV ?= $(shell svnversion -n .)
-GITCOM ?= $(shell git log -1 --pretty=format:"%H")
-
+GITROMS ?= $(shell git log -1 --pretty=format:"%H")
+GITPROJ ?= $(shell git --git-dir=$(MY_PROJECT_DIR)/.git/ log -1 --pretty=format:"%H")
 ROOTDIR := $(shell pwd)
 
 ifndef FORT
@@ -379,8 +379,8 @@ else
   CPPFLAGS += -D'SVN_REV="$(SVNREV)"'
 endif
 
-ifdef GITCOM
-  CPPFLAGS += -D'GIT_COM=\"$(GITCOM)\"'
+ifdef GITROMS
+  CPPFLAGS += -D'GIT_ROMS="$(GITROMS)"' -D'GIT_PROJ="$(GITPROJ)"'
 endif
 #--------------------------------------------------------------------------
 #  Build target directories.

@@ -744,12 +744,24 @@
 #endif
 
 ! Save current git commit
-#if defined GIT_COM
+#if defined GIT_ROMS
         IF (exit_flag.eq.NoError) THEN
-           status=nf90_put_att(ncid, nf90_global, 'git_com',             &
-     &          TRIM(git_com))
+           status=nf90_put_att(ncid, nf90_global, 'git_roms',             &
+     &          TRIM(git_roms))
            IF (status.ne.nf90_noerr) THEN
-              IF (Master) WRITE (stdout,20) 'git_com', TRIM(ncname)
+              IF (Master) WRITE (stdout,20) 'git_roms', TRIM(ncname)
+              exit_flag=3
+              ioerror=status
+           END IF
+        END IF
+#endif
+
+#if defined GIT_PROJ
+        IF (exit_flag.eq.NoError) THEN
+           status=nf90_put_att(ncid, nf90_global, 'git_proj',             &
+     &          TRIM(git_proj))
+           IF (status.ne.nf90_noerr) THEN
+              IF (Master) WRITE (stdout,20) 'git_proj', TRIM(ncname)
               exit_flag=3
               ioerror=status
            END IF
