@@ -495,6 +495,8 @@
 !
         character (len=40 ) :: svn_rev
         character (len=256) :: svn_url
+
+        character (len=256) :: git_com
 !
       CONTAINS
 !
@@ -855,6 +857,9 @@
           END IF
 #ifdef SVN_REV
           svn_rev=SVN_REV
+#endif
+#ifdef GIT_COM
+          git_com=GIT_COM
 #endif
 !
 !  Read in other variable information.

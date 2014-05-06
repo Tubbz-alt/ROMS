@@ -326,6 +326,7 @@ OS := $(patsubst sn%,UNICOS-sn,$(OS))
 CPU := $(shell uname -m | sed 's/[\/ ]/-/g')
 
 SVNREV ?= $(shell svnversion -n .)
+GITCOM ?= $(shell git log -1 --pretty=format:"%H")
 
 ROOTDIR := $(shell pwd)
 
@@ -378,6 +379,9 @@ else
   CPPFLAGS += -D'SVN_REV="$(SVNREV)"'
 endif
 
+ifdef GITCOM
+  CPPFLAGS += -D'GIT_COM=\"$(GITCOM)\"'
+endif
 #--------------------------------------------------------------------------
 #  Build target directories.
 #--------------------------------------------------------------------------

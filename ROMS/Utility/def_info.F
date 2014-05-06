@@ -742,6 +742,20 @@
           END IF
         END IF
 #endif
+
+! Save current git commit
+#if defined GIT_COM
+        IF (exit_flag.eq.NoError) THEN
+           status=nf90_put_att(ncid, nf90_global, 'git_com',             &
+     &          TRIM(git_com))
+           IF (status.ne.nf90_noerr) THEN
+              IF (Master) WRITE (stdout,20) 'git_com', TRIM(ncname)
+              exit_flag=3
+              ioerror=status
+           END IF
+        END IF
+#endif
+
 #ifndef DEBUGGING
 !
 !  Local root directory, cpp header directory and file, and analytical
@@ -2829,7 +2843,7 @@
 #if (defined M2CLM_NUDGING || defined M3CLM_NUDING || defined TCLM_NUDGING)
 !
 ! Output spatially varying nudging coefficients
-! 
+!
 #if defined M2CLM_NUDGING
         Vinfo( 1)='M2nudgcof'
         Vinfo( 2)='2D momentum inverse nudging time scale'
@@ -2919,7 +2933,7 @@
         Vinfo(14)='visc4, scalar'
         Vinfo(22)='coordinates'
         Aval(5)=REAL(r2dvar,r8)
-        
+
         IF (ncid.eq.STA(ng)%ncid) THEN
           status=def_var(ng, model, ncid, varid, NF_TYPE,               &
      &                   1, (/stadim/), Aval, Vinfo, ncname)
@@ -3009,7 +3023,7 @@
 
 #endif
 ! end salinity block
-#endif 
+#endif
 
 !
 !  Coriolis Parameter.
