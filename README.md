@@ -2,6 +2,7 @@ This is my fork of the official Rutgers ROMS trunk code.
 
 Changes
 -------
+    * Save in netcdf4_classic_format by default so that I can use netcdf4.MFDataset in Python
     * ROMS now stores the latest git commit IDs for both my ROMS fork and the current project I'm compiling
     * Ability to control rotation of harmonic and biharmonic viscosity/diffusivities individually
     * netCDF saving of spatially varying bottom friction parameters - rdrg, rdrg2
