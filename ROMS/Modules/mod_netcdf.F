@@ -136,7 +136,11 @@
 !
 #if defined HDF5
 !     integer :: CMODE = nf90_hdf5         ! NetCDF-4/HDF5 format file
-      integer :: CMODE = nf90_netcdf4      ! NetCDF-4/HDF5 format file
+!      integer :: CMODE = nf90_netcdf4      ! NetCDF-4/HDF5 format file
+
+! see below for flags
+! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f90/NF90_005fCREATE.html#NF90_005fCREATE
+      integer :: CMODE = IOR(nf90_netcdf4, nf90_classic_model)
 #else
       integer :: CMODE = nf90_64bit_offset ! NetCDF 64-bit offset format
 !                                            (large file support)
