@@ -2,7 +2,7 @@
       MODULE step3d_uv_mod
 #if defined NONLINEAR && defined SOLVE3D
 !
-!svn $Id: step3d_uv.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: step3d_uv.F 741 2014-10-15 21:05:43Z arango $
 !=======================================================================
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license           Hernan G. Arango   !
@@ -176,12 +176,12 @@
       real(r8), intent(in) :: DV_avg1(LBi:,LBj:)
       real(r8), intent(in) :: DU_avg2(LBi:,LBj:)
       real(r8), intent(in) :: DV_avg2(LBi:,LBj:)
-      real(r8), intent(in) :: ru(LBi:,LBj:,0:,:)
-      real(r8), intent(in) :: rv(LBi:,LBj:,0:,:)
 #  ifdef NEARSHORE_MELLOR
       real(r8), intent(in) :: ubar_stokes(LBi:,LBj:)
       real(r8), intent(in) :: vbar_stokes(LBi:,LBj:)
 #  endif
+      real(r8), intent(inout) :: ru(LBi:,LBj:,0:,:)
+      real(r8), intent(inout) :: rv(LBi:,LBj:,0:,:)
 #  ifdef DIAGNOSTICS_UV
       real(r8), intent(inout) :: DiaU2wrk(LBi:,LBj:,:)
       real(r8), intent(inout) :: DiaV2wrk(LBi:,LBj:,:)
@@ -225,12 +225,12 @@
       real(r8), intent(in) :: DV_avg1(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: DU_avg2(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: DV_avg2(LBi:UBi,LBj:UBj)
-      real(r8), intent(in) :: ru(LBi:UBi,LBj:UBj,0:N(ng),2)
-      real(r8), intent(in) :: rv(LBi:UBi,LBj:UBj,0:N(ng),2)
 #  ifdef NEARSHORE_MELLOR
       real(r8), intent(in) :: ubar_stokes(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: vbar_stokes(LBi:UBi,LBj:UBj)
 #  endif
+      real(r8), intent(inout) :: ru(LBi:UBi,LBj:UBj,0:N(ng),2)
+      real(r8), intent(inout) :: rv(LBi:UBi,LBj:UBj,0:N(ng),2)
 #  ifdef DIAGNOSTICS_UV
       real(r8), intent(inout) :: DiaU2wrk(LBi:UBi,LBj:UBj,NDM2d)
       real(r8), intent(inout) :: DiaV2wrk(LBi:UBi,LBj:UBj,NDM2d)
@@ -556,6 +556,7 @@
 # endif
 # ifdef WET_DRY
             u(i,j,k,nnew)=u(i,j,k,nnew)*umask_wet(i,j)
+            ru(i,j,k,nrhs)=ru(i,j,k,nrhs)*umask_wet(i,j)
 # endif
 # ifdef NEARSHORE_MELLOR
             u_stokes(i,j,k)=u_stokes(i,j,k)-DCs(i,0)
@@ -888,6 +889,7 @@
 # endif
 # ifdef WET_DRY
               v(i,j,k,nnew)=v(i,j,k,nnew)*vmask_wet(i,j)
+              rv(i,j,k,nrhs)=rv(i,j,k,nrhs)*vmask_wet(i,j)
 # endif
 # ifdef NEARSHORE_MELLOR
               v_stokes(i,j,k)=v_stokes(i,j,k)-DCs(i,0)
@@ -934,7 +936,9 @@
 # if defined DIAGNOSTICS_UV && defined MASKING
           DO k=1,N(ng)
             DO i=Istr,Iend
-              DiaV3wrk(i,j,k,idiag)=DiaV3wrk(i,j,k,idiag)*vmask(i,j)
+              DO idiag=1,NDM3d
+                DiaV3wrk(i,j,k,idiag)=DiaV3wrk(i,j,k,idiag)*vmask(i,j)
+              END DO
             END DO
           END DO
 # endif
@@ -1031,6 +1035,9 @@
           CFs(i,0)=DC(i,0)*(CFs(i,0)-cff2)              ! recursive
 # endif
           ubar(i,j,1)=DC(i,0)*DU_avg1(i,j)
+# ifdef WET_DRY
+          ubar(i,j,1)=ubar(i,j,1)*umask_wet(i,j)
+# endif
           ubar(i,j,2)=ubar(i,j,1)
 # ifdef DIAGNOSTICS_UV
           DiaU2wrk(i,j,M2rate)=ubar(i,j,1)-DiaU2int(i,j,M2rate)*DC(i,0)
@@ -1241,6 +1248,9 @@
             CFs(i,0)=DC(i,0)*(CFs(i,0)-cff2)             ! recursive
 # endif
             vbar(i,j,1)=DC(i,0)*DV_avg1(i,j)
+# ifdef WET_DRY
+            vbar(i,j,1)=vbar(i,j,1)*vmask_wet(i,j)
+# endif
             vbar(i,j,2)=vbar(i,j,1)
 # ifdef DIAGNOSTICS_UV
             DiaV2wrk(i,j,M2rate)=vbar(i,j,1)-                           &

@@ -2,7 +2,7 @@
 #ifndef ANA_NUDGCOEF
       SUBROUTINE get_nudgcoef (ng, model)
 !
-!svn $Id: get_nudgcoef.F 721 2014-03-13 22:58:53Z arango $
+!svn $Id: get_nudgcoef.F 736 2014-05-16 20:14:45Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
@@ -104,7 +104,7 @@
 !
       IF (LnudgeM3CLM(ng)) THEN
         IF (.not.find_string(var_name,n_var,Vname(1,idM3nc),            &
-     &                       NUD(ng)%Vid(idM2nc))) THEN
+     &                       NUD(ng)%Vid(idM3nc))) THEN
           IF (Master) WRITE (stdout,10) TRIM(Vname(1,idM3nc)),          &
      &                                  TRIM(ncname)
           exit_flag=2

@@ -2,7 +2,7 @@
       MODULE rp_step3d_uv_mod
 #if defined TL_IOMS && defined SOLVE3D
 !
-!svn $Id: rp_step3d_uv.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: rp_step3d_uv.F 731 2014-04-17 20:51:05Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -1477,7 +1477,9 @@
 # if defined DIAGNOSTICS_UV && defined MASKING
 !!        DO k=1,N(ng)
 !!          DO i=Istr,Iend
-!!            DiaV3wrk(i,j,k,idiag)=DiaV3wrk(i,j,k,idiag)*vmask(i,j)
+!!            DO idiag=1,NDM3d
+!!              DiaV3wrk(i,j,k,idiag)=DiaV3wrk(i,j,k,idiag)*vmask(i,j)
+!!            END DO
 !!          END DO
 !!        END DO
 # endif
