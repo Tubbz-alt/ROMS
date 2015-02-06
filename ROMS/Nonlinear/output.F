@@ -31,7 +31,11 @@
       USE mod_scalars
 !
 # ifdef DISTRIBUTE
+# ifdef RST_TIME
+      USE distribute_mod, ONLY : mp_bcasts, mp_barrier, mp_bcastf
+# else
       USE distribute_mod, ONLY : mp_bcasts
+# endif
 # endif
       USE strings_mod,    ONLY : FoundError
 !
@@ -44,6 +48,8 @@
 !  Local variable declarations.
 !
       logical :: Ldefine, NewFile
+
+      real(r8) :: now_time, dtime
 
       integer :: Fcount, ifile, status, tile
 !
@@ -528,11 +534,45 @@
 !  Write out data into restart NetCDF file.
 !
       IF (LwrtRST(ng)) THEN
-        IF ((iic(ng).gt.ntstart(ng)).and.                               &
+
+#ifdef RST_TIME
+        ! get time since start (with possible arbitrary offset)
+        IF (Master) THEN
+           CALL CPU_TIME(now_time)
+           dtime = now_time - last_rst_time
+        END IF
+#ifdef DISTRIBUTE
+        CALL mp_bcastf(ng, iNLM, dtime)
+#endif
+#endif
+
+         IF ((iic(ng).gt.ntstart(ng)).and.                               &
+#ifdef RST_TIME
+     &     (dtime.ge.rstdt).or.(iic(ng).eq.(ntend(ng)+1))) THEN
+          IF (dtime.ge.rstdt) THEN
+            ! save rst file when dt > rstdt
+ 1000       FORMAT ('     Approximately ', f9.2, ' seconds since ',         &
+     &              'restart file was last written.')
+            IF (Master) THEN
+               WRITE(stdout, 1000) now_time-last_rst_time
+            END IF
+          END IF
+#else
      &      (MOD(iic(ng)-1,nRST(ng)).eq.0)) THEN
-          CALL wrt_rst (ng)
+          ! Using default nRST logic
+#endif
+
+        CALL wrt_rst (ng)
+
+#ifdef RST_TIME
+          IF (Master) THEN
+            ! save time when rst is saved in mod_param
+            CALL CPU_TIME(last_rst_time)
+          END IF
+#endif
           IF (FoundError(exit_flag, NoError, __LINE__,                  &
      &                   __FILE__)) RETURN
+
         END IF
       END IF
 

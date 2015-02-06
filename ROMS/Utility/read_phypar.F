@@ -609,6 +609,10 @@
               Npts=load_l(Nval, Cval, Ngrids, LcycleRST)
             CASE ('NRST')
               Npts=load_i(Nval, Rval, Ngrids, nRST)
+#ifdef RST_TIME
+            CASE ('RSTDT')
+              Npts=load_r(Nval, Rval, Ngrids, rstdt)
+#endif
             CASE ('NSTA')
               Npts=load_i(Nval, Rval, Ngrids, nSTA)
             CASE ('NFLT')
@@ -3847,6 +3851,10 @@
           WRITE (out,130) nRST(ng), 'nRST',                             &
      &          'Number of timesteps between the writing of data',      &
      &          'into restart fields.'
+#ifdef RST_TIME
+          WRITE (out,140) rstdt, 'rstdt',                               &
+     &         'CPU time (s) after which restart file is written.'
+#endif
           WRITE (out,130) ninfo(ng), 'ninfo',                           &
      &          'Number of timesteps between print of information',     &
      &          'to standard output.'

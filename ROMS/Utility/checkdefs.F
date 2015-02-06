@@ -2022,6 +2022,12 @@
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+13)=' !RST_SINGLE,'
 #endif
+#ifdef RST_TIME
+      IF (Master) WRITE (stdout,20) 'RST_TIME',                         &
+     &   'Save restart file when specified time has elapsed.'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+12)=' RST_TIME,'
+#endif
 #ifdef SALINITY
 !
       IF (Master) WRITE (stdout,20) 'SALINITY',                         &
