@@ -44,6 +44,8 @@
 !
       logical :: Ldefine, NewFile
 
+      real :: now_time
+
       integer :: Fcount, ifile, status, tile
 !
       SourceFile='output.F'
@@ -394,8 +396,13 @@
 !  Write out data into restart NetCDF file.
 !
       IF (LwrtRST(ng)) THEN
+         ! get time since start
+         CALL CPU_TIME(now_time)
+
+         print *, 'now_time = ', now_time
         IF ((iic(ng).gt.ntstart(ng)).and.                               &
-     &      (MOD(iic(ng)-1,nRST(ng)).eq.0)) THEN
+     &        ((now_time - 3600.0d0).ge.0)) THEN
+           print *, 'calling wrt_rst'
           CALL wrt_rst (ng)
           IF (exit_flag.ne.NoError) RETURN
         END IF
