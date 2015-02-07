@@ -533,6 +533,8 @@
               Npts=load_l(Nval, Cval, Ngrids, LcycleRST)
             CASE ('NRST')
               Npts=load_i(Nval, Rval, Ngrids, nRST)
+            CASE ('RSTDT')
+              Npts=load_i(Nval, Rval, Ngrids, rstdt)
             CASE ('NSTA')
               Npts=load_i(Nval, Rval, Ngrids, nSTA)
             CASE ('NFLT')
