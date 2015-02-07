@@ -406,7 +406,8 @@
 #ifdef RST_TIME
         ! save rst file when dt > rstdt
      &        ((now_time - last_rst_time).ge.(rstdt))) THEN
-        print *, 'dt = ', now_time-last_rst_time
+        print *, '        dt = ', now_time-last_rst_time,               &
+                 ' seconds since last RST file was written.'
 #else
         ! default nRST logic
      &      (MOD(iic(ng)-1,nRST(ng)).eq.0)) THEN
