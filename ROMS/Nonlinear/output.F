@@ -44,7 +44,7 @@
 !
       logical :: Ldefine, NewFile
 
-      real :: now_time
+      real :: now_time, temp_time
 
       integer :: Fcount, ifile, status, tile
 !
@@ -396,14 +396,30 @@
 !  Write out data into restart NetCDF file.
 !
       IF (LwrtRST(ng)) THEN
+
+#ifdef RST_TIME
          ! get time since start
          CALL CPU_TIME(now_time)
+#endif
 
-         print *, 'now_time = ', now_time
         IF ((iic(ng).gt.ntstart(ng)).and.                               &
-     &        ((now_time - 3600.0d0).ge.0)) THEN
-           print *, 'calling wrt_rst'
+#ifdef RST_TIME
+        ! save rst file when dt > rstdt
+     &        ((now_time - last_rst_time).ge.(rstdt))) THEN
+        print *, 'dt = ', now_time-last_rst_time
+#else
+        ! default nRST logic
+     &      (MOD(iic(ng)-1,nRST(ng)).eq.0)) THEN
+#endif
+
           CALL wrt_rst (ng)
+
+#ifdef RST_TIME
+          ! save time when rst is saved
+          CALL CPU_TIME(temp_time)
+          ! This is saved in mod_netcdf
+          last_rst_time = temp_time
+#endif
           IF (exit_flag.ne.NoError) RETURN
         END IF
       END IF
