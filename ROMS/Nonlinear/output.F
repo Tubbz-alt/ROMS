@@ -400,14 +400,15 @@
 #ifdef RST_TIME
          ! get time since start
          CALL CPU_TIME(now_time)
+ 1000    FORMAT ('      dt = ', f8.2, ' seconds since restart file was', &
+     &     ' last written.')
 #endif
 
         IF ((iic(ng).gt.ntstart(ng)).and.                               &
 #ifdef RST_TIME
         ! save rst file when dt > rstdt
      &        ((now_time - last_rst_time).ge.(rstdt))) THEN
-        print *, '        dt = ', now_time-last_rst_time,               &
-                 ' seconds since last RST file was written.'
+        write(stdout, 1000) now_time-last_rst_time
 #else
         ! default nRST logic
      &      (MOD(iic(ng)-1,nRST(ng)).eq.0)) THEN
