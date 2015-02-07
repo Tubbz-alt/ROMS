@@ -464,6 +464,14 @@
 !
       integer :: NNS = 0
 
+!
+! Parameters for elapsed time based restart file saving.
+!
+#ifdef RST_TIME
+      real(r8) :: rstdt         ! Δt for saving of restart file
+      real(r8) :: last_rst_time ! Save last time a restart file was saved
+#endif
+
 #ifdef FLOATS
 !
 !-----------------------------------------------------------------------
@@ -831,6 +839,13 @@
 !  Allocate lower and upper bounds structure for I/O NetCDF files.
 !
       allocate ( IOBOUNDS(Ngrids) )
+#ifdef RST_TIME
+! https://gcc.gnu.org/onlinedocs/gfortran/CPU_005fTIME.html#CPU_005fTIME
+!     says that CPU_TIME might have system-dependent, arbitrary offset
+!     So, we initialize last_rst_time with the time when initalize_param is called
+!     rather than initialize to 0.
+      CALL CPU_TIME(last_rst_time)
+#endif
 
 #ifdef DIAGNOSTICS
 !
