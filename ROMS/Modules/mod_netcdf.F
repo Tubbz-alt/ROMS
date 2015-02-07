@@ -76,6 +76,10 @@
       integer, parameter :: Mvars = 800 ! maximum number of variables
       integer, parameter :: NvarD = 5   ! number of variable dimensions
       integer, parameter :: NvarA = 50  ! number of variable attributes
+#ifdef RST_TIME
+      real(r8) :: rstdt ! Δt for saving of restart file
+      real(r8) :: last_rst_time = 0 ! Save last time a restart file was saved
+#endif
 !
 !  Generic information about current NetCDF for all dimensions and
 !  all variables.
