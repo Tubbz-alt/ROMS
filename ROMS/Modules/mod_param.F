@@ -538,8 +538,9 @@
 ! Parameters for elapsed time based restart file saving.
 !
 #ifdef RST_TIME
-      real(r8) :: rstdt         ! Δt for saving of restart file
-      real(r8) :: last_rst_time ! Save last time a restart file was saved
+      logical  :: LrstFinal = .FALSE.     ! Save RST file after last timestep?
+      real(r8) :: rstdt = 9e36            ! Δt for saving of restart file
+      real(r8) :: last_rst_time           ! Save last time a restart file was saved
 #endif
 
 #ifdef FLOATS

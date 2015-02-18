@@ -548,7 +548,9 @@
 
          IF ((iic(ng).gt.ntstart(ng)).and.                               &
 #ifdef RST_TIME
-     &     (dtime.ge.rstdt).or.(iic(ng).eq.(ntend(ng)+1))) THEN
+     &       (dtime.ge.rstdt).or.                                         &
+        ((LrstFinal).and.(iic(ng).eq.(ntend(ng)+1)))) THEN
+
           IF (dtime.ge.rstdt) THEN
             ! save rst file when dt > rstdt
  1000       FORMAT ('     Approximately ', f9.2, ' seconds since ',         &
