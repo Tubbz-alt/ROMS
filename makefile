@@ -1,6 +1,6 @@
-# svn $Id: makefile 709 2014-01-23 20:09:38Z arango $
+# svn $Id: makefile 757 2015-02-23 17:43:15Z arango $
 #::::::::::::::::::::::::::::::::::::::::::::::::::::: Hernan G. Arango :::
-# Copyright (c) 2002-2014 The ROMS/TOMS Group             Kate Hedstrom :::
+# Copyright (c) 2002-2015 The ROMS/TOMS Group             Kate Hedstrom :::
 #   Licensed under a MIT/X style license                                :::
 #   See License_ROMS.txt                                                :::
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -28,7 +28,7 @@
 #                                                                       :::
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-NEED_VERSION := 3.80 3.81 3.82 3.82.90 4.0
+NEED_VERSION := 3.80 3.81 3.82 3.82.90 4.0 4.1
 $(if $(filter $(MAKE_VERSION),$(NEED_VERSION)),,        \
  $(error This makefile requires one of GNU make version $(NEED_VERSION).))
 

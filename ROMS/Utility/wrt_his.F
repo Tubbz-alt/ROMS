@@ -1,9 +1,9 @@
 #include "cppdefs.h"
       SUBROUTINE wrt_his (ng)
 !
-!svn $Id: wrt_his.F 741 2014-10-15 21:05:43Z arango $
+!svn $Id: wrt_his.F 764 2015-06-23 22:40:38Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2015 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -151,6 +151,27 @@
       END IF
 #endif
 #ifdef WET_DRY
+!
+!  Write out wet/dry mask at PSI-points.
+!
+      scale=1.0_r8
+      gtype=gfactor*p2dvar
+      status=nf_fwrite2d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idPwet),   &
+     &                   HIS(ng)%Rindex, gtype,                         &
+     &                   LBi, UBi, LBj, UBj, scale,                     &
+# ifdef MASKING
+     &                   GRID(ng) % pmask,                              &
+# endif
+     &                   GRID(ng) % pmask_wet,                          &
+     &                   SetFillVal = .FALSE.)
+      IF (status.ne.nf90_noerr) THEN
+        IF (Master) THEN
+          WRITE (stdout,10) TRIM(Vname(1,idPwet)), HIS(ng)%Rindex
+        END IF
+        exit_flag=3
+        ioerror=status
+        RETURN
+      END IF
 !
 !  Write out wet/dry mask at RHO-points.
 !

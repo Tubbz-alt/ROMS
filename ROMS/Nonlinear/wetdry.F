@@ -2,9 +2,9 @@
       MODULE wetdry_mod
 #ifdef WET_DRY
 !
-!svn $Id: wetdry.F 744 2014-11-19 23:57:22Z arango $
+!svn $Id: wetdry.F 751 2015-01-07 22:56:36Z arango $
 !=======================================================================
-!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2015 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                           Hernan G. Arango   !
 !==================================================== John C. Warner ===

@@ -3,9 +3,9 @@
       MODULE lmd_bkpp_mod
 #if defined NONLINEAR && defined LMD_BKPP && defined SOLVE3D
 !
-!svn $Id: lmd_bkpp.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: lmd_bkpp.F 759 2015-03-27 19:45:34Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2014 The ROMS/TOMS Group       Scott M. Durski   !
+!  Copyright (c) 2002-2015 The ROMS/TOMS Group       Scott M. Durski   !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -560,6 +560,16 @@
      &                     rmask,                                       &
 #  endif
      &                     hbbl)
+!
+      DO j=Jstr,Jend
+        DO i=Istr,Iend
+          hbbl(i,j)=MIN(hbbl(i,j),z_w(i,j,N(ng)))
+          hbbl(i,j)=MAX(hbbl(i,j),z_w(i,j,0))
+#  ifdef MASKING
+          hbbl(i,j)=hbbl(i,j)*rmask(i,j)
+#  endif
+        END DO
+      END DO
 # endif
 !
 !  Apply gradient or periodic boundary conditions.

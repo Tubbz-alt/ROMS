@@ -1,9 +1,9 @@
 #include "cppdefs.h"
       MODULE ocean_control_mod
 !
-!svn $Id: is4dvar_ocean.h 709 2014-01-23 20:09:38Z arango $
+!svn $Id: is4dvar_ocean.h 751 2015-01-07 22:56:36Z arango $
 !================================================== Hernan G. Arango ===
-!  Copyright (c) 2002-2014 The ROMS/TOMS Group       Andrew M. Moore   !
+!  Copyright (c) 2002-2015 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                                              !
 !=======================================================================
@@ -1105,7 +1105,7 @@
 !  Note that Lfinp=Lbinp so the the forcing and boundary
 !  adjustments are both processsed correctly.
 # ifdef BALANCE_OPERATOR
-!  Currently, We don't need the call to tl_balance below, but we
+!  Currently, We do not need the call to tl_balance below, but we
 !  might later if we impose a balance constraint on the wind stress
 !  corrections.
 # endif

@@ -5,9 +5,9 @@
       MODULE lmd_skpp_mod
 #if defined NONLINEAR && defined LMD_SKPP && defined SOLVE3D
 !
-!svn $Id: lmd_skpp.F 709 2014-01-23 20:09:38Z arango $
+!svn $Id: lmd_skpp.F 759 2015-03-27 19:45:34Z arango $
 !=======================================================================
-!  Copyright (c) 2002-2014 The ROMS/TOMS Group                         !
+!  Copyright (c) 2002-2015 The ROMS/TOMS Group                         !
 !    Licensed under a MIT/X style license                              !
 !    See License_ROMS.txt                           Hernan G. Arango   !
 !========================================== Alexander F. Shchepetkin ===
@@ -621,6 +621,16 @@
      &                     rmask,                                       &
 #  endif
      &                     hsbl)
+!
+      DO j=Jstr,Jend
+        DO i=Istr,Iend
+          hsbl(i,j)=MIN(hsbl(i,j),z_w(i,j,N(ng)))
+          hsbl(i,j)=MAX(hsbl(i,j),z_w(i,j,0))
+#  ifdef MASKING
+          hsbl(i,j)=hsbl(i,j)*rmask(i,j)
+#  endif
+        END DO
+      END DO
 # endif
 !
 !  Apply gradient or periodic boundary conditions.

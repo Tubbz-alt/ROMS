@@ -1,9 +1,9 @@
 /*
 ** Include file "cppdefs.h"
 **
-** svn $Id: cppdefs.h 743 2014-11-19 23:13:06Z arango $
+** svn $Id: cppdefs.h 766 2015-06-24 00:51:28Z arango $
 ********************************************************** Hernan G. Arango ***
-** Copyright (c) 2002-2014 The ROMS/TOMS Group                               **
+** Copyright (c) 2002-2015 The ROMS/TOMS Group                               **
 **   Licensed under a MIT/X style license                                    **
 **   See License_ROMS.txt                                                    **
 *******************************************************************************
@@ -89,6 +89,11 @@
 ** SOLAR_SOURCE        use if solar radiation source term                    **
 ** SRELAXATION         use if salinity relaxation as a freshwater flux       **
 ** WTYPE_GRID          use to turn ON spatially varying Jerlov water type    **
+**                                                                           **
+** OPTION to suppress further surface cooling if the SST is at freezing      **
+** point or below and the net surface heat flux is cooling:                  **
+**                                                                           **
+** LIMIT_STFLX_COOLING use to suppress SST cooling below freezing point      **
 **                                                                           **
 ** OPTIONS for MPDATA 3D Advection:                                          **
 **                                                                           **
