@@ -2,7 +2,7 @@
       MODULE ad_v2dbc_mod
 #ifdef ADJOINT
 !
-!svn $Id: ad_v2dbc_im.F 751 2015-01-07 22:56:36Z arango $
+!svn $Id: ad_v2dbc_im.F 767 2015-07-10 19:35:54Z arango $
 !================================================== Hernan G. Arango ===
 !  Copyright (c) 2002-2015 The ROMS/TOMS Group       Andrew M. Moore   !
 !    Licensed under a MIT/X style license                              !
@@ -1814,7 +1814,7 @@
 !
 !  Southern edge, Shchepetkin boundary condition (Maison et al., 2010).
 !
-        ELSE IF (tl_LBC(isouth,isVbar,ng)%Shchepetkin) THEN
+        ELSE IF (ad_LBC(isouth,isVbar,ng)%Shchepetkin) THEN
           DO i=Istr,Iend
             IF (LBC_apply(ng)%south(i)) THEN
               cff=0.5_r8*(GRID(ng)%h(i,Jstr-1)+                         &
