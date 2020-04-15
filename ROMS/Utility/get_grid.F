@@ -211,8 +211,13 @@
 # endif
 # ifndef ANA_SPONGE
       IF (LuvSponge(ng)) THEN
-        IF (.not.find_string(var_name,n_var,'visc_factor',vindex)) THEN
-          IF (Master) WRITE (stdout,20) 'visc_factor', TRIM(ncname)
+        IF (.not.find_string(var_name,n_var,'visc_factor2',vindex)) THEN
+          IF (Master) WRITE (stdout,20) 'visc_factor2', TRIM(ncname)
+          exit_flag=2
+          RETURN
+        END IF
+        IF (.not.find_string(var_name,n_var,'visc_factor4',vindex)) THEN
+          IF (Master) WRITE (stdout,20) 'visc_factor4', TRIM(ncname)
           exit_flag=2
           RETURN
         END IF
@@ -626,7 +631,7 @@
 !  Read in horizontal, spatially varying factor to increase/decrease
 !  viscosity (nondimensional) in specific areas of the domain.
 !
-          CASE ('visc_factor')
+          CASE ('visc_factor2')
             IF (LuvSponge(ng)) THEN
               gtype=r2dvar
               status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,        &
@@ -636,7 +641,7 @@
 #  ifdef MASKING
      &                          GRID(ng) % rmask,                       &
 #  endif
-     &                          MIXING(ng) % visc_factor)
+     &                          MIXING(ng) % visc_factor2)
               IF (FoundError(status, nf90_noerr, __LINE__,              &
      &                       __FILE__)) THEN
                 exit_flag=2
@@ -645,21 +650,58 @@
               ELSE
                 IF (Master) THEN
                   WRITE (stdout,30) 'horizontal viscosity sponge '//    &
-     &                              'factor: visc_factor',              &
+     &                              'factor: visc_factor2',              &
      &                              ng, TRIM(ncname), Fmin, Fmax
                 END IF
               END IF
               IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
                 CALL exchange_r2d_tile (ng, tile,                       &
      &                                  LBi, UBi, LBj, UBj,             &
-     &                                  MIXING(ng) % visc_factor)
+     &                                  MIXING(ng) % visc_factor2)
               END IF
 #  ifdef DISTRIBUTE
               CALL mp_exchange2d (ng, tile, model, 1,                   &
      &                            LBi, UBi, LBj, UBj,                   &
      &                            NghostPoints,                         &
      &                            EWperiodic(ng), NSperiodic(ng),       &
-     &                            MIXING(ng) % visc_factor)
+     &                            MIXING(ng) % visc_factor2)
+#  endif
+            END IF
+
+          CASE ('visc_factor4')
+            IF (LuvSponge(ng)) THEN
+              gtype=r2dvar
+              status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,        &
+     &                          var_name(i), var_id(i), 0,              &
+     &                          gtype, Vsize, LBi, UBi, LBj, UBj,       &
+     &                          Fscl, Fmin, Fmax,                       &
+#  ifdef MASKING
+     &                          GRID(ng) % rmask,                       &
+#  endif
+     &                          MIXING(ng) % visc_factor4)
+              IF (FoundError(status, nf90_noerr, __LINE__,              &
+     &                       __FILE__)) THEN
+                exit_flag=2
+                ioerror=status
+                EXIT
+              ELSE
+                IF (Master) THEN
+                  WRITE (stdout,30) 'horizontal viscosity sponge '//    &
+     &                              'factor: visc_factor4',              &
+     &                              ng, TRIM(ncname), Fmin, Fmax
+                END IF
+              END IF
+              IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+                CALL exchange_r2d_tile (ng, tile,                       &
+     &                                  LBi, UBi, LBj, UBj,             &
+     &                                  MIXING(ng) % visc_factor4)
+              END IF
+#  ifdef DISTRIBUTE
+              CALL mp_exchange2d (ng, tile, model, 1,                   &
+     &                            LBi, UBi, LBj, UBj,                   &
+     &                            NghostPoints,                         &
+     &                            EWperiodic(ng), NSperiodic(ng),       &
+     &                            MIXING(ng) % visc_factor4)
 #  endif
             END IF
 

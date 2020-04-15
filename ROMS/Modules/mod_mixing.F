@@ -163,7 +163,8 @@
           real(r8), pointer :: Hviscosity(:,:)
 #endif
 #ifndef ANA_SPONGE
-          real(r8), pointer :: visc_factor(:,:)
+          real(r8), pointer :: visc_factor2(:,:)
+          real(r8), pointer :: visc_factor4(:,:)
 #endif
 #if defined UV_VIS2
           real(r8), pointer :: visc2_p(:,:)
@@ -417,7 +418,9 @@
 !
 #ifndef ANA_SPONGE
       IF (LuvSponge(ng)) THEN
-        allocate ( MIXING(ng) % visc_factor(LBi:UBi,LBj:UBj) )
+        allocate ( MIXING(ng) % visc_factor2(LBi:UBi,LBj:UBj) )
+        Dmem(ng)=Dmem(ng)+size2d
+        allocate ( MIXING(ng) % visc_factor4(LBi:UBi,LBj:UBj) )
         Dmem(ng)=Dmem(ng)+size2d
       END IF
 #endif
@@ -882,7 +885,8 @@
 #ifndef ANA_SPONGE
           IF (LuvSponge(ng)) THEN
             DO i=Imin,Imax
-              MIXING(ng) % visc_factor(i,j) = IniVal
+              MIXING(ng) % visc_factor2(i,j) = IniVal
+              MIXING(ng) % visc_factor4(i,j) = IniVal
             END DO
           END IF
 #endif

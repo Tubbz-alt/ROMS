@@ -379,17 +379,17 @@
 # ifdef UV_VIS2
         DO i=IstrT,IendT
           DO j=JstrT,JendT
-            visc2_r(i,j)=ABS(MIXING(ng)%visc_factor(i,j))*              &
+            visc2_r(i,j)=ABS(MIXING(ng)%visc_factor2(i,j))*              &
      &                   visc2_r(i,j)
           END DO
         END DO
         DO i=IstrP,IendT
           DO j=JstrP,JendT
             visc2_p(i,j)=0.25_r8*                                       &
-     &                   ABS(MIXING(ng)%visc_factor(i-1,j-1)+           &
-     &                       MIXING(ng)%visc_factor(i  ,j-1)+           &
-     &                       MIXING(ng)%visc_factor(i-1,j  )+           &
-     &                       MIXING(ng)%visc_factor(i  ,j  ))*          &
+     &                   ABS(MIXING(ng)%visc_factor2(i-1,j-1)+           &
+     &                       MIXING(ng)%visc_factor2(i  ,j-1)+           &
+     &                       MIXING(ng)%visc_factor2(i-1,j  )+           &
+     &                       MIXING(ng)%visc_factor2(i  ,j  ))*          &
      &                   visc2_p(i,j)
           END DO
         END DO
@@ -397,17 +397,17 @@
 # ifdef UV_VIS4
         DO i=IstrT,IendT
           DO j=JstrT,JendT
-            visc4_r(i,j)=ABS(MIXING(ng)%visc_factor(i,j))*              &
+            visc4_r(i,j)=ABS(MIXING(ng)%visc_factor4(i,j))*              &
      &                   visc4_r(i,j)
           END DO
         END DO
         DO i=IstrP,IendT
           DO j=JstrP,JendT
             visc4_p(i,j)=0.25_r8*                                       &
-     &                   ABS(MIXING(ng)%visc_factor(i-1,j-1)+           &
-     &                       MIXING(ng)%visc_factor(i  ,j-1)+           &
-     &                       MIXING(ng)%visc_factor(i-1,j  )+           &
-     &                       MIXING(ng)%visc_factor(i  ,j  ))*          &
+     &                   ABS(MIXING(ng)%visc_factor4(i-1,j-1)+           &
+     &                       MIXING(ng)%visc_factor4(i  ,j-1)+           &
+     &                       MIXING(ng)%visc_factor4(i-1,j  )+           &
+     &                       MIXING(ng)%visc_factor4(i  ,j  ))*          &
      &                   visc4_p(i,j)
           END DO
         END DO
