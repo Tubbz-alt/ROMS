@@ -664,19 +664,19 @@
       DO j=JstrT,JendT
         DO i=IstrT,IendT
 # if defined DIFF_3DCOEF
-#  if defined TS_DIF2
-          Hdiffusion(i,j)=PecletCoef*Uscale*grdscl(i,j)
-#  elif defined TS_DIF4
+#  if defined TS_DIF4
           Hdiffusion(i,j)=PecletCoef*Uscale*grdscl(i,j)**3
+#  elif defined TS_DIF2
+          Hdiffusion(i,j)=PecletCoef*Uscale*grdscl(i,j)
 #  endif
           my_DiffMin=MIN(my_DiffMin, Hdiffusion(i,j))
           my_DiffMax=MAX(my_DiffMax, Hdiffusion(i,j))
 # endif
 # if defined VISC_3DCOEF
-#  if defined UV_VIS2
-          Hviscosity(i,j)=PecletCoef*Uscale*grdscl(i,j)
-#  elif defined UV_VIS4
+#  if defined UV_VIS4
           Hviscosity(i,j)=PecletCoef*Uscale*grdscl(i,j)**3
+#  elif defined UV_VIS2
+          Hviscosity(i,j)=PecletCoef*Uscale*grdscl(i,j)
 #  endif
           my_ViscMin=MIN(my_ViscMin, Hviscosity(i,j))
           my_ViscMax=MAX(my_ViscMax, Hviscosity(i,j))
@@ -944,10 +944,10 @@
      &            ' GRDMAX = ',1pe15.8,' km')
 # endif
 # ifdef DIFF_3DCOEF
-#  ifdef TS_DIF2
-          units='m2/s'
-#  elif defined TS_DIF4
+#  ifdef TS_DIF4
           units='m4/s'
+#  elif defined TS_DIF2
+          units='m2/s'
 #  endif
           WRITE (stdout,50) DiffMin(ng), TRIM(units),                   &
      &                      DiffMax(ng), TRIM(units)
@@ -957,10 +957,10 @@
      &             1pe15.8,1x,a)
 # endif
 # ifdef VISC_3DCOEF
-#  ifdef UV_VIS2
-          units='m2/s'
-#  elif defined UV_VIS4
+#  ifdef UV_VIS4
           units='m4/s'
+#  elif defined UV_VIS2
+          units='m2/s'
 #  endif
           WRITE (stdout,60) ViscMin(ng), TRIM(units),                   &
      &                      ViscMax(ng), TRIM(units)
